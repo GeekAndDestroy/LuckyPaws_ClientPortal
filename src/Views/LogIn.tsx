@@ -29,7 +29,7 @@ export default function LogIn({}: LogInProps) {
             <input type="email" placeholder="Email" className="input input-bordered"/>
             <input type="password" placeholder="Password" className="input input-bordered"/>
             <button className="btn btn-secondary">Log In</button>
-            <a href="#" className="text-center">Don't have an account? Sign Up</a>
+            <a href="/signup" className="text-center link-secondary">Don't have an account? Sign Up</a>
         </div>
     </div>
   )

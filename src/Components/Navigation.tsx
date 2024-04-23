@@ -1,13 +1,17 @@
 // Assume everything is written with TailwindCSS and DaisyUI
 import { useState, useEffect } from 'react';
-import { themeChange } from 'theme-change'
 
 
 type NavigationProps = {};
 
 export default function Navigation({}: NavigationProps) {
 
-
+  const [isdark, setIsdark] = useState(
+    JSON.parse(localStorage.getItem('isdark') ?? "")
+  );
+  useEffect(() => {
+    localStorage.setItem('isdark', JSON.stringify(isdark));
+  }, [isdark]);
 
 
     return (
@@ -42,13 +46,13 @@ export default function Navigation({}: NavigationProps) {
                             <a href="/">Home</a>
                         </li>
                         <li>
-                            <a href="/gallery">Gallery</a>
+                            <a href="/gallery">My Gallery</a>
                         </li>
                         <li>
                             <a href="profile">Profile</a>
                         </li>
                         <li>
-                            <a>Scheduling (coming soon)</a>
+                            <a>Book a Visit (coming soon)</a>
                         </li>
                         <li>
                             <a>Log Out</a>
@@ -59,8 +63,8 @@ export default function Navigation({}: NavigationProps) {
             <div className="navbar-center">
                 <img
                     src="/src/assets/luckypawslogo.png"
-                    width="60"
-                    height="60"
+                    width="80"
+                    height="80"
                 />
             </div>
             <div className="navbar-end">
@@ -68,15 +72,15 @@ export default function Navigation({}: NavigationProps) {
                     {/* this hidden checkbox controls the state */}
                     <input
                         type="checkbox"
-                        // checked={isdark}
-                        // onChange={() => setIsdark(!isdark)}
+                        checked={isdark}
+                        onChange={() => setIsdark(!isdark)}
                         className="theme-controller"
-                        value="synthwave"
+                        value="light"
                     />
 
                     {/* sun icon */}
                     <svg
-                        className="swap-off fill-current w-10 h-10"
+                        className="swap-on fill-current w-10 h-10"
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                     >
@@ -85,7 +89,7 @@ export default function Navigation({}: NavigationProps) {
 
                     {/* moon icon */}
                     <svg
-                        className="swap-on fill-current w-10 h-10"
+                        className="swap-off fill-current w-10 h-10"
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                     >
