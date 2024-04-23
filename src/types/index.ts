@@ -6,6 +6,13 @@ type UserFormDataType = {
     confirm_password: string;
   };
 
+  type UserFormType = {
+    first_name: string;
+    last_name: string;
+    email: string;
+    password: string;
+  };
+
   type LogInFormDataType = {
     email: string;
     password: string;
@@ -13,5 +20,6 @@ type UserFormDataType = {
 
   export type { 
     UserFormDataType,
-    LogInFormDataType 
+    LogInFormDataType,
+
 };

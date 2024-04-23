@@ -28,7 +28,7 @@ export default function LogIn({}: LogInProps) {
         <div className="mx-auto w-80 sm:max-w-md md:max-w-lg flex flex-col gap-5">
             <input type="email" placeholder="Email" className="input input-bordered"/>
             <input type="password" placeholder="Password" className="input input-bordered"/>
-            <button className="btn btn-primary">Log In</button>
+            <button className="btn btn-secondary">Log In</button>
             <a href="#" className="text-center">Don't have an account? Sign Up</a>
         </div>
     </div>

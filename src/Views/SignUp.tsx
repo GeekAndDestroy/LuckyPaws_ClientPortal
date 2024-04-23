@@ -40,7 +40,7 @@ export default function SignUp({}: SignUpProps) {
             <input type="email" name='email' placeholder="Email" value={userFormData.email} onChange={handleInputChange} className="input input-bordered"/>
             <input type="password" name='password' placeholder="Password" value={userFormData.password} onChange={handleInputChange} className="input input-bordered"/>
             <input type="password" name='confirm_password' placeholder="Confirm Password" value={userFormData.confirm_password} onChange={handleInputChange} className={"input input-bordered"} />
-            <button className="btn btn-primary" disabled={disableSubmit}>Create Account</button>
+            <button className="btn btn-secondary" disabled={disableSubmit}>Create Account</button>
             <a href="/login" className="text-center">Already have an account? Log In</a>
         </div>
     </div>
