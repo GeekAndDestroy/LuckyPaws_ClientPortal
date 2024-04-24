@@ -2,12 +2,16 @@
 import { useState, useEffect } from 'react';
 
 
-type NavigationProps = {};
+type NavigationProps = {
+    isLoggedIn: boolean,
+    logUserOut: () => void,
+    isAdmin: boolean | null
+};
 
-export default function Navigation({}: NavigationProps) {
+export default function Navigation({ isLoggedIn, logUserOut, isAdmin }: NavigationProps) {
 
   const [isdark, setIsdark] = useState(
-    JSON.parse(localStorage.getItem('isdark') ?? "")
+    JSON.parse(localStorage.getItem('isdark') ?? "false")
   );
   useEffect(() => {
     localStorage.setItem('isdark', JSON.stringify(isdark));
@@ -15,7 +19,7 @@ export default function Navigation({}: NavigationProps) {
 
 
     return (
-        <div className="navbar bg-base-100 z-10">
+        <div className="navbar bg-base-100 z-10 shadow-lg">
             <div className="navbar-start">
                 <div className="dropdown ">
                     <div
@@ -54,8 +58,11 @@ export default function Navigation({}: NavigationProps) {
                         <li>
                             <a>Book a Visit (coming soon)</a>
                         </li>
+                        {isAdmin && <li>
+                            <a href="/admin">Admin Page</a>
+                            </li>}
                         <li>
-                            <a>Log Out</a>
+                            <a onClick={logUserOut}>Log Out</a>
                         </li>
                     </ul>
                 </div>

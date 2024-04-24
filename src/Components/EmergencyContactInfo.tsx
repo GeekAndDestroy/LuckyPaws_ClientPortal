@@ -1,10 +1,10 @@
-
+// Assume everything is written with TailwindCSS and DaisyUI
 
 type EmergencyContactInfoProps = {}
 
 export default function EmergencyContactInfo({}: EmergencyContactInfoProps) {
   return (
-    <div className="hero w-96 lg:w-3/4 bg-base-200">
+    <div className="hero w-96 lg:w-3/4 bg-base-200 rounded-lg">
         <div className="hero-content text-center">
             <div className="max-w-md">
                 <h1 className="text-5xl m-4 font-bold">Emergency Contact Info</h1>
@@ -20,7 +20,7 @@ export default function EmergencyContactInfo({}: EmergencyContactInfoProps) {
                             <input type="tel" id="phone"
                             placeholder="Phone Number" className="input input-bordered" />
                     </div>
-                    <button className="btn m-4 btn-secondary">Update Emergency Contact</button>
+                    <button className="btn m-4 btn-secondary shadow-lg shadow-fuchsia-800">Update Emergency Contact</button>
                 </form>
             </div>
         </div>

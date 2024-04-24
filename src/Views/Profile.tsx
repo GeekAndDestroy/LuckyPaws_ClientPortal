@@ -3,10 +3,14 @@ import DogCard from "../Components/DogCard";
 import EmergencyContactInfo from "../Components/EmergencyContactInfo";
 import ProfileInfo from "../Components/ProfileInfo";
 import VeterinarianInfo from "../Components/VeterinarianInfo";
+import { CategoryType, UserType } from "../types";
 
-type ProfileProps = {};
+type ProfileProps = {
+    flashMessage: (newMessage: string, category:CategoryType) => void
+    currentUser: UserType|null
+};
 
-export default function Profile({}: ProfileProps) {
+export default function Profile({ flashMessage, currentUser }: ProfileProps) {
     return (
         <>
             <div className="divider">Dog(s)</div>
@@ -14,7 +18,7 @@ export default function Profile({}: ProfileProps) {
                 <div className="w-1/2 lg:w-1/4 p-2">
                     <DogCard />
                 </div>
-                <div className="card image-full card-compact w-1/2 lg:w-1/4 p-2 bg-base-100 shadow-xl">
+                <div className="card card-compact w-1/2 lg:w-1/4 p-2 bg-base-100 shadow-xl">
                     <figure>
                         <img
                             src="../src/assets/paw.svg"
@@ -25,7 +29,7 @@ export default function Profile({}: ProfileProps) {
                     </figure>
                     <div className="card-body">
                         <div className="card-actions justify-center align-center">
-                            <button className="btn btn-secondary">
+                            <button className="btn btn-secondary shadow-md shadow-fuchsia-800">
                                 Add Dog
                             </button>
                         </div>
@@ -34,7 +38,7 @@ export default function Profile({}: ProfileProps) {
             </div>
             <div className="divider">Profile</div>
             <div className="flex flex-wrap justify-center">
-                <ProfileInfo />
+                <ProfileInfo currentUser={currentUser} flashMessage={flashMessage} />
             </div>
             <div className="divider">Emergency Contact</div>
             <div className="flex flex-wrap justify-center">

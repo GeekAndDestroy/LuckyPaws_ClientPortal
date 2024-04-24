@@ -1,14 +1,17 @@
 // Assume everything is written with TailwindCSS and DaisyUI
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserFormDataType } from "../types";
+import { CategoryType, UserFormDataType, UserType } from "../types";
+import { register } from "../lib/apiWrapper";
 
-type SignUpProps = {};
+type SignUpProps = {
+    flashMessage: (newMessage:string|undefined, newCategory:CategoryType|undefined) => void
+};
 
-export default function SignUp({}: SignUpProps) {
+export default function SignUp({ flashMessage }: SignUpProps) {
     const navigate = useNavigate();
 
-    const [userFormData, setUserFormData] = useState<UserFormDataType>({
+    const [userFormData, setUserFormData] = useState<Partial<UserFormDataType>>({
         first_name: "",
         last_name: "",
         email: "",
@@ -16,14 +19,32 @@ export default function SignUp({}: SignUpProps) {
         confirm_password: "",
     });
 
-    const [seePassword, setSeePassword] = useState(false);
+    // const [seePassword, setSeePassword] = useState(false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserFormData({ ...userFormData, [e.target.name]: e.target.value });
     };
 
+    const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+            e.preventDefault();
+
+            console.log(userFormData);
+
+            let response = await register(userFormData as UserType);
+            if (response.error){
+                console.log(response.error);
+                flashMessage(response.error, 'danger');
+            } else {
+                let newUser = response.data!;
+                flashMessage(`Welcome, ${newUser.first_name}!`, 'success');
+                console.log(newUser);
+                navigate('/login');
+            }
+    }
+
+
     const disableSubmit =
-        userFormData.password.length < 5 ||
+        (userFormData.password?.length ?? 0) < 5 ||
         userFormData.password !== userFormData.confirm_password;
 
     return (
@@ -37,7 +58,7 @@ export default function SignUp({}: SignUpProps) {
             <h1 className="text-center text-2xl sm:text-3xl font-semibold py-4">
                 Sign Up
             </h1>
-            <form>
+            <form onSubmit={handleFormSubmit}>
             <div className="mx-auto w-80 sm:max-w-md md:max-w-lg flex flex-col gap-5">
                     <input
                         type="text"
@@ -80,12 +101,12 @@ export default function SignUp({}: SignUpProps) {
                         className={"input input-bordered"}
                     />
                     <button
-                        className="btn btn-secondary"
+                        className="btn btn-secondary shadow-lg shadow-fuchsia-800"
                         disabled={disableSubmit}
                     >
                         Create Account
                     </button>
-                <a href="/login" className="text-center link-secondary">
+                <a href="/login" className="text-center link-secondary ">
                     Already have an account? Log In
                 </a>
             </div>
