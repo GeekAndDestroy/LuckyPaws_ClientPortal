@@ -7,7 +7,7 @@ import { CategoryType, UserType } from "../types";
 
 type ProfileProps = {
     flashMessage: (newMessage: string, category:CategoryType) => void
-    currentUser: UserType|null
+    currentUser: UserType|null|undefined
 };
 
 export default function Profile({ flashMessage, currentUser }: ProfileProps) {

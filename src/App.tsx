@@ -92,7 +92,7 @@ const logUserOut = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/gallery" element={<Gallery />} />
-          <Route path="/profile" element={<Profile currentUser={loggedInUser} lashMessage={flashMessage}/>} />
+          <Route path="/profile" element={<Profile currentUser={loggedInUser} flashMessage={flashMessage}/>} />
           <Route path="/signup" element={<SignUp flashMessage={flashMessage}/>} />
           <Route path="/login" element={<LogIn logUserIn={logUserIn} flashMessage={flashMessage}/>} />
         </Routes>
