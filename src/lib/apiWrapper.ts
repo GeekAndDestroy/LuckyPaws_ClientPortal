@@ -155,6 +155,23 @@ async function getEmergencyContacts(token:string):Promise<APIResponse<EmergencyC
     return { data, error }
 }
 
+async function getEmergencyContactByUserID(id:number, token:string):Promise<APIResponse<EmergencyContactType>> {
+    let data;
+    let error;
+    try {
+        const response = await apiClientTokenAuth(token).get(`${emergencyContactsEndpoint}/user/${id}`)
+        data = response.data
+    } catch (err) {
+        if (axios.isAxiosError(err)){
+            error = err.response?.data.error
+        } else {
+            error = "Something went wrong"
+        }
+    }
+    return { data, error }
+}
+
+
 async function editEmergencyContact(emergencyContact:Partial<EmergencyContactType>, id:number, token:string):Promise<APIResponse<Partial<EmergencyContactType>>> {
     let data;
     let error;
@@ -386,6 +403,7 @@ export {
     getUser, 
     createEmergencyContact, 
     getEmergencyContacts, 
+    getEmergencyContactByUserID,
     editEmergencyContact, 
     deleteEmergencyContact, 
     createVeterinarian, 

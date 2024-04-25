@@ -7,7 +7,7 @@ import { CategoryType, UserType } from "../types";
 
 type ProfileProps = {
     flashMessage: (newMessage: string, category:CategoryType) => void
-    currentUser: UserType|null|undefined
+    currentUser: UserType
 };
 
 export default function Profile({ flashMessage, currentUser }: ProfileProps) {
@@ -42,7 +42,7 @@ export default function Profile({ flashMessage, currentUser }: ProfileProps) {
             </div>
             <div className="divider">Emergency Contact</div>
             <div className="flex flex-wrap justify-center">
-                <EmergencyContactInfo />
+                <EmergencyContactInfo currentUser={currentUser} flashMessage={flashMessage} />
             </div>
             <div className="divider">Veterinarian</div>
             <div className="flex flex-wrap justify-center">

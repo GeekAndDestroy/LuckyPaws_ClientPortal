@@ -6,7 +6,7 @@ import { CategoryType, UserType } from "../types";
 
 type ProfileInfoProps = {
     flashMessage: (newMessage: string, category: CategoryType) => void;
-    currentUser: UserType | null | undefined;
+    currentUser: UserType | undefined;
 };
 
 export default function ProfileInfo({
@@ -17,23 +17,26 @@ export default function ProfileInfo({
     const { userId } = useParams();
 
     const [user, setUser] = useState<Partial<UserType>>({
-        // user_id: NaN,
-        first_name: "",
-        last_name: "",
-        street1: "",
-        street2: "",
-        city: "",
-        state: "",
-        email: "",
-        zip: undefined,
-        phone_number: undefined,
+        // // user_id: NaN,
+        // first_name: "",
+        // last_name: "",
+        // street1: "",
+        // street2: "",
+        // city: "",
+        // state: "",
+        // email: "",
+        // zip: undefined,
+        // phone_number: undefined
     });
 
     useEffect(() => {
-        let token = currentUser!.token;
+        if (!currentUser?.token) {
+            console.log("Waiting for user and token...");
+            return;
+        }    
 
         async function getUserInfo() {
-            let response = await getUser(token);
+            let response = await getUser(currentUser!.token);
             if (response.data) {
                 const user = response.data;
                 const currentUserId = JSON.parse(
@@ -41,7 +44,7 @@ export default function ProfileInfo({
                 );
 
                 console.log(user);
-                if (!currentUser) {
+                if (!currentUser?.token) {
                     console.log("No user logged in");
                 } else if (user.user_id !== currentUserId) {
                     flashMessage(
@@ -63,7 +66,7 @@ export default function ProfileInfo({
                     });
                 }
             } else if (response.error) {
-                console.log(response.error, token);
+                console.log(response.error, currentUser!.token);
                 // flashMessage(response.error, 'danger');
                 // navigate('/');
             } else {
@@ -72,7 +75,7 @@ export default function ProfileInfo({
             }
         }
         getUserInfo();
-    }, [userId]);
+    }, [currentUser?.token, userId ]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUser({ ...user, [e.target.id]: e.target.value });
@@ -81,12 +84,11 @@ export default function ProfileInfo({
     const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         let token = currentUser!.token;
-        let response = await editUser(user, token);
+        let response = await editUser(user, token!);
         if (response.error) {
             flashMessage(response.error, "danger");
         } else {
             flashMessage("Profile updated", "success");
-            navigate("/");
         }
     };
 
@@ -102,7 +104,7 @@ export default function ProfileInfo({
                                 name="first_name"
                                 id="first_name"
                                 placeholder="First Name"
-                                value={user.first_name}
+                                value={user.first_name? user.first_name : ""}
                                 onChange={handleInputChange}
                                 className="input input-bordered"
                             />
@@ -111,7 +113,7 @@ export default function ProfileInfo({
                                 name="last_name"
                                 id="last_name"
                                 placeholder="Last Name"
-                                value={user.last_name}
+                                value={user.last_name? user.last_name : ""}
                                 onChange={handleInputChange}
                                 className="input input-bordered"
                             />
@@ -120,7 +122,7 @@ export default function ProfileInfo({
                                 name="street1"
                                 id="street1"
                                 placeholder="Street 1"
-                                value={user.street1}
+                                value={user.street1? user.street1 : ""}
                                 onChange={handleInputChange}
                                 className="input input-bordered"
                             />
@@ -129,7 +131,7 @@ export default function ProfileInfo({
                                 name="street2"
                                 id="street2"
                                 placeholder="Street 2"
-                                value={user.street2}
+                                value={user.street2? user.street2 : ""}
                                 onChange={handleInputChange}
                                 className="input input-bordered"
                             />
@@ -138,7 +140,7 @@ export default function ProfileInfo({
                                 name="city"
                                 id="city"
                                 placeholder="City"
-                                value={user.city}
+                                value={user.city? user.city : ""}
                                 onChange={handleInputChange}
                                 className="input input-bordered"
                             />
@@ -147,7 +149,7 @@ export default function ProfileInfo({
                                 name="state"
                                 id="state"
                                 placeholder="State"
-                                value={user.state}
+                                value={user.state? user.state : ""}
                                 onChange={handleInputChange}
                                 className="input input-bordered"
                             />
@@ -156,7 +158,7 @@ export default function ProfileInfo({
                                 name="zip"
                                 id="zip"
                                 placeholder="Zip Code"
-                                value={user.zip}
+                                value={user.zip? user.zip : ""}
                                 onChange={handleInputChange}
                                 className="input input-bordered"
                             />
@@ -165,7 +167,7 @@ export default function ProfileInfo({
                                 name="email"
                                 id="email"
                                 placeholder="Email"
-                                value={user.email}
+                                value={user.email? user.email : ""}
                                 onChange={handleInputChange}
                                 className="input input-bordered"
                             />
@@ -174,7 +176,7 @@ export default function ProfileInfo({
                                 name="phone_number"
                                 id="phone"
                                 placeholder="Phone Number"
-                                value={user.phone_number}
+                                value={user.phone_number? user.phone_number : ""}
                                 onChange={handleInputChange}
                                 className="input input-bordered"
                             />

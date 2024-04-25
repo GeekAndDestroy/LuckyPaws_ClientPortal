@@ -29,10 +29,12 @@ export type LogInFormDataType = {
 };
 
 export type EmergencyContactType = {
+    ec_id: number,
     first_name: string;
     last_name: string;
     phone_number: number;
     email: string;
+    user_id: number;
 };
 
 

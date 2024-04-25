@@ -26,11 +26,11 @@ function App() {
       is_admin: null
   })
 
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     navigate('/login');
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('/login');
+    }
+  }, []);
 
   const flashMessage = (newMessage:string|undefined, newCategory:CategoryType|undefined) => {
     setMessage(newMessage);
@@ -65,12 +65,12 @@ const logUserIn = () => {
 const logUserOut = () => {
   setIsLoggedIn(false)
   // localStorage.clear();
-  localStorage.remove('token');
-  localStorage.remove('email');
-  localStorage.remove('first_name');
-  localStorage.remove('last_name');
-  localStorage.remove('user_id');
-  localStorage.remove('is_admin');
+  localStorage.removeItem('token');
+  localStorage.removeItem('email');
+  localStorage.removeItem('first_name');
+  localStorage.removeItem('last_name');
+  localStorage.removeItem('user_id');
+  localStorage.removeItem('is_admin');
   flashMessage('You have been logged out', 'dark');
   setLoggedInUser({
       is_admin: null,

@@ -44,7 +44,7 @@ export default function Navigation({ isLoggedIn, logUserOut, isAdmin }: Navigati
                     </div>
                     <ul
                         tabIndex={0}
-                        className="menu sm:menu-lg lg:menu-horizontal dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+                        className="menu sm:menu-lg lg:menu-horizontal dropdown-content mt-3 z-[1] p-2 shadow dark:bg-gray-500 rounded-box w-52"
                     >
                         <li>
                             <a href="/">Home</a>
