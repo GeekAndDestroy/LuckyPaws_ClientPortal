@@ -95,9 +95,8 @@ export default function EmergencyContactInfo({ flashMessage, currentUser }: Emer
 
       try {
         if (ec) {
-
           // Emergency contact already exists, update it
-          await editEmergencyContact(emergencyContacts, ec.ec_id as number, token);
+          await editEmergencyContact(emergencyContacts, ec.ec_id, token);
           flashMessage("Emergency contact updated successfully", "success");
         } else {
           // No emergency contact exists, create a new one
@@ -166,7 +165,6 @@ export default function EmergencyContactInfo({ flashMessage, currentUser }: Emer
         </div>
     );
 }
-function flashMessage(arg0: string, arg1: string) {
-  throw new Error("Function not implemented.");
-}
+
+
 

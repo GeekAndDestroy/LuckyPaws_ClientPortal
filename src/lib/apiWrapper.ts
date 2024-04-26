@@ -123,6 +123,22 @@ async function getUser(token:string):Promise<APIResponse<UserType>> {
     return { data, error }
 }
 
+async function getAllUsers():Promise<APIResponse<UserType[]>> {
+    let data;
+    let error;
+    try {
+        const response = await apiClientNoAuth().get(userEndpoint)
+        data = response.data
+    } catch (err) {
+        if (axios.isAxiosError(err)){
+            error = err.response?.data.error
+        } else {
+            error = "Something went wrong"
+        }
+    }
+    return { data, error }
+}
+
 async function createEmergencyContact(newEmergencyContact:EmergencyContactType, token:string):Promise<APIResponse<EmergencyContactType>> {
     let data;
     let error;
@@ -236,6 +252,22 @@ async function getVeterinarians(token:string):Promise<APIResponse<VeterinarianTy
     return { data, error }
 }
 
+async function getVeterinariansByUserID(id:number, token:string):Promise<APIResponse<VeterinarianType>> {
+    let data;
+    let error;
+    try {
+        const response = await apiClientTokenAuth(token).get(`${veterinariansEndpoint}/user/${id}`)
+        data = response.data
+    } catch (err) {
+        if (axios.isAxiosError(err)){
+            error = err.response?.data.error
+        } else {
+            error = "Something went wrong"
+        }
+    }
+    return { data, error }
+}
+
 async function editVeterinarian(veterinarian:Partial<VeterinarianType>, id:number, token:string):Promise<APIResponse<Partial<VeterinarianType>>> {
     let data;
     let error;
@@ -271,6 +303,7 @@ async function deleteVeterinarian(id:number, token:string):Promise<APIResponse<V
 async function createDog(newDog:DogType, token:string):Promise<APIResponse<DogType>> {
     let data;
     let error;
+    console.log(newDog)
     try {
         const response = await apiClientTokenAuth(token).post(dogsEndpoint, newDog)
         data = response.data
@@ -284,14 +317,46 @@ async function createDog(newDog:DogType, token:string):Promise<APIResponse<DogTy
     return { data, error }
 }
 
-async function getDogs(token:string):Promise<APIResponse<DogType[]>> {
+async function getDogs():Promise<APIResponse<DogType[]>> {
     let data;
     let error;
     try {
-        const response = await apiClientTokenAuth(token).get(dogsEndpoint)
+        const response = await apiClientNoAuth().get(dogsEndpoint)
         data = response.data
     } catch (err) {
         if (axios.isAxiosError(err)) {
+            error = err.response?.data.error
+        } else {
+            error = "Something went wrong"
+        }
+    }
+    return { data, error }
+}
+
+async function getDogById(id:number, token:string):Promise<APIResponse<DogType>> {
+    let data;
+    let error;
+    try {
+        const response = await apiClientTokenAuth(token).get(`${dogsEndpoint}/${id}`)
+        data = response.data
+    } catch (err) {
+        if (axios.isAxiosError(err)){
+            error = err.response?.data.error
+        } else {
+            error = "Something went wrong"
+        }
+    }
+    return { data, error }
+}
+
+async function getDogsByUserID(id:number, token:string):Promise<APIResponse<DogType[]>> {
+    let data;
+    let error;
+    try {
+        const response = await apiClientTokenAuth(token).get(`${dogsEndpoint}/user/${id}`)
+        data = response.data
+    } catch (err) {
+        if (axios.isAxiosError(err)){
             error = err.response?.data.error
         } else {
             error = "Something went wrong"
@@ -395,27 +460,99 @@ async function getImageByID(id:number, token:string):Promise<APIResponse<ImageTy
     return { data, error }
 }
 
-export { 
-    register, 
-    login, 
-    editUser, 
+async function getImagesByClientUserId(id:number, token:string):Promise<APIResponse<ImageType[]>> {
+    let data;
+    let error;
+    try {
+        const response = await apiClientTokenAuth(token).get(`${imagesEndpoint}/client/${id}`)
+        data = response.data
+    } catch (err) {
+        if (axios.isAxiosError(err)) {
+            error = err.response?.data.error
+        } else {
+            error = "Something went wrong"
+        }
+    }
+    return { data, error }
+}
+
+async function updateImage(image:Partial<ImageType>, id:number, token:string):Promise<APIResponse<Partial<ImageType>>>{
+    let data;
+    let error;
+    try {
+        const response = await apiClientTokenAuth(token).put(`${imagesEndpoint}/${id}`, image)
+        data = response.data
+    } catch (err) {
+        if (axios.isAxiosError(err)){
+            error = err.response?.data.error
+        } else {
+            error = "Something went wrong"
+        }
+    }
+    return { data, error }
+}
+
+async function uploadToCloudinary(image:Partial<ImageType>, id:number, token:string):Promise<APIResponse<Partial<ImageType>>>{
+    let data;
+    let error;
+    try {
+        const response = await apiClientTokenAuth(token).put(`${imagesEndpoint}/${id}`, image)
+        data = response.data
+    } catch (err) {
+        if (axios.isAxiosError(err)){
+            error = err.response?.data.error
+        } else {
+            error = "Something went wrong"
+        }
+    }
+    return { data, error }
+}
+
+
+// export async function uploadImageToCloudinary(file: File) {
+//     const url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
+//     const fetched = await fetch(url, {
+//       method: "post",
+//       body: JSON.stringify({
+//         file,
+//         cloud_name: cloudName,
+//         upload_preset: "unsigned",
+//       }),
+//     });
+//     const parsed = await fetched.json()
+//     console.log({
+//       parsed // 400 error, message: "Upload preset must be specified when using unsigned upload"
+//     });
+//   }
+
+
+
+export {
+    createDog,
+    createEmergencyContact,
+    createVeterinarian,
+    deleteDog,
+    deleteEmergencyContact,
+    deleteImage,
+    deleteVeterinarian,
     deleteUser,
-    getUser, 
-    createEmergencyContact, 
-    getEmergencyContacts, 
+    editDog,
+    editEmergencyContact,
+    editUser,
+    editVeterinarian,
+    getAllUsers,
+    getDogs,
+    getDogById,
+    getDogsByUserID,
     getEmergencyContactByUserID,
-    editEmergencyContact, 
-    deleteEmergencyContact, 
-    createVeterinarian, 
-    getVeterinarians, 
-    editVeterinarian, 
-    deleteVeterinarian, 
-    createDog, 
-    getDogs, 
-    editDog, 
-    deleteDog, 
-    uploadImage, 
-    getImages, 
-    deleteImage, 
-    getImageByID 
+    getEmergencyContacts,
+    getImageByID,
+    getImages,
+    getUser,
+    getVeterinarians,
+    getVeterinariansByUserID,
+    login,
+    register,
+    updateImage,
+    uploadImage
 }

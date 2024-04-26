@@ -47,19 +47,19 @@ export default function Navigation({ isLoggedIn, logUserOut, isAdmin }: Navigati
                         className="menu sm:menu-lg lg:menu-horizontal dropdown-content mt-3 z-[1] p-2 shadow dark:bg-gray-500 rounded-box w-52"
                     >
                         <li>
-                            <a href="/">Home</a>
+                            <a href="../">Home</a>
                         </li>
                         <li>
-                            <a href="/gallery">My Gallery</a>
+                            <a href="../gallery">My Gallery</a>
                         </li>
                         <li>
-                            <a href="profile">Profile</a>
+                            <a href="../profile">Profile</a>
                         </li>
                         <li>
-                            <a>Book a Visit (coming soon)</a>
+                            <a>Book a Visit</a>
                         </li>
                         {isAdmin && <li>
-                            <a href="/admin">Admin Page</a>
+                            <a href="../admin">Admin Page</a>
                             </li>}
                         <li>
                             <a onClick={logUserOut}>Log Out</a>

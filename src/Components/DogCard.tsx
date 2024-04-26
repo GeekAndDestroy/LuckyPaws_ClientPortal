@@ -1,14 +1,21 @@
 // Assume everything is written with TailwindCSS and DaisyUI
+import { useState, useEffect } from "react";
+import { CategoryType, DogType, UserType } from "../types"
 
-type DogCardProps = {}
 
-export default function DogCard({}: DogCardProps) {
+type DogCardProps = {
+  dog: DogType,
+  currentUser: UserType,
+  flashMessage: (newMessage: string, category: CategoryType) => void;
+}
+
+export default function DogCard({ dog, currentUser, flashMessage }: DogCardProps) {
   return (
     <div className="card card-compact bg-base-100 shadow-xl">
-  <figure><img src="./src/assets/tempdogphotos/IMG_5433.jpeg" alt="Shoes" /></figure>
+  <figure><img src={ dog.profile_pic_url } alt="Dog" /></figure>
   <div className="card-body">
     <div className="card-actions justify-center">
-      <button className="btn btn-secondary shadow-md shadow-fuchsia-800">*Dog Name*</button>
+      <button className="btn btn-secondary shadow-md shadow-fuchsia-800" onClick={() => window.location.href = `../dog/${dog.dog_id}`}>{ dog.name }</button>
     </div>
   </div>
 </div>

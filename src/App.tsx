@@ -1,16 +1,20 @@
 import { useEffect, useState } from 'react'
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Navigation from './Components/Navigation';
 import SignUp from './Views/SignUp';
 import LogIn from './Views/LogIn';
 import Home from './Views/Home';
 import Gallery from './Views/Gallery';
 import Profile from './Views/Profile';
+import Admin from './Views/Admin';
+import DogForm from './Views/DogForm';
+import AddDog from './Views/AddDog';
 import './App.css'
 import { CategoryType, UserType } from './types';
 import AlertMessage from './Components/AlertMessage';
 
 function App() {
+  const location = useLocation()
   const navigate = useNavigate();
 
   const [message, setMessage] = useState<string | undefined>(undefined);
@@ -26,11 +30,15 @@ function App() {
       is_admin: null
   })
 
+
+
+
+
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn && location.pathname !== '/signup') {
       navigate('/login');
     }
-  }, []);
+  }, [location.pathname]);
 
   const flashMessage = (newMessage:string|undefined, newCategory:CategoryType|undefined) => {
     setMessage(newMessage);
@@ -39,7 +47,7 @@ function App() {
         if (newMessage && newCategory){
             flashMessage(undefined, undefined)
         }
-    }, 15000)
+    }, 10000)
 }
 
 useEffect(() => {
@@ -92,9 +100,15 @@ const logUserOut = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/gallery" element={<Gallery />} />
-          <Route path="/profile" element={<Profile currentUser={loggedInUser} flashMessage={flashMessage}/>} />
+          <Route path="/profile" element={<Profile currentUser={loggedInUser as UserType} flashMessage={flashMessage}/>} />
           <Route path="/signup" element={<SignUp flashMessage={flashMessage}/>} />
           <Route path="/login" element={<LogIn logUserIn={logUserIn} flashMessage={flashMessage}/>} />
+          <Route path="/newdog" element={<AddDog flashMessage={flashMessage} currentUser={loggedInUser as UserType} />} />
+          <Route path="/dog/:dogId" element={<DogForm flashMessage={flashMessage} currentUser={loggedInUser  as UserType} />} />
+          <Route path="/clientadmin/:user_id" element={<DogForm flashMessage={flashMessage} currentUser={loggedInUser  as UserType} />} />
+          <Route path="/dogadmin/:user_id" element={<DogForm flashMessage={flashMessage} currentUser={loggedInUser  as UserType} />} />
+
+          <Route path="/admin" element={<Admin isLoggedIn={isLoggedIn} isAdmin={isAdmin} flashMessage={flashMessage} />} />
         </Routes>
       </div>
     </>

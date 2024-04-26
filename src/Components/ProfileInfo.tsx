@@ -14,7 +14,7 @@ export default function ProfileInfo({
     currentUser,
 }: ProfileInfoProps) {
     const navigate = useNavigate();
-    const { userId } = useParams();
+    // const { userId } = useParams();
 
     const [user, setUser] = useState<Partial<UserType>>({
         // // user_id: NaN,
@@ -75,7 +75,7 @@ export default function ProfileInfo({
             }
         }
         getUserInfo();
-    }, [currentUser?.token, userId ]);
+    }, [currentUser?.token]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUser({ ...user, [e.target.id]: e.target.value });
@@ -88,7 +88,7 @@ export default function ProfileInfo({
         if (response.error) {
             flashMessage(response.error, "danger");
         } else {
-            flashMessage("Profile updated", "success");
+            flashMessage("Profile updated", "secondary");
         }
     };
 
