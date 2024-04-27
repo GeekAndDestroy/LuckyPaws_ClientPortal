@@ -11,7 +11,7 @@ type DogCardProps = {
 
 export default function DogCard({ dog, currentUser, flashMessage }: DogCardProps) {
   return (
-    <div className="card card-compact bg-base-100 shadow-xl">
+    <div className="card card-compact bg-base-100 shadow-xl w-36 sm:w-60 m-2 p-4">
   <figure><img src={ dog.profile_pic_url } alt="Dog" /></figure>
   <div className="card-body">
     <div className="card-actions justify-center">

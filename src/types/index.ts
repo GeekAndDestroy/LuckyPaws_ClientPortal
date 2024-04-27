@@ -6,7 +6,7 @@ export type UserFormDataType = {
     confirm_password?: string;
   };
 
-export type UserType = {
+export type UserType = {  
     first_name: string;
     last_name: string;
     street1: string;
@@ -21,6 +21,8 @@ export type UserType = {
     password: string;
     user_id: number;
     is_admin: boolean | null;
+    emergency_contacts?: EmergencyContactType[];
+    veterinarians?: VeterinarianType[];
   };
 
 export type LogInFormDataType = {
@@ -77,6 +79,7 @@ export type ImageType = {
     image_url: string;
     client_user_id: number;
     description: string;
+    dog_id: number;
 }
 
 export type CategoryType = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark'

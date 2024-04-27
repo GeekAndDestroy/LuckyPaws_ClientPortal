@@ -9,9 +9,11 @@ import Profile from './Views/Profile';
 import Admin from './Views/Admin';
 import DogForm from './Views/DogForm';
 import AddDog from './Views/AddDog';
+import AdminDogInfo from './Views/AdminDogInfo';
 import './App.css'
 import { CategoryType, UserType } from './types';
 import AlertMessage from './Components/AlertMessage';
+import AdminClientInfo from './Views/AdminClientInfo';
 
 function App() {
   const location = useLocation()
@@ -98,17 +100,17 @@ const logUserOut = () => {
       
       <div>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home currentUser={loggedInUser as UserType}/>} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/profile" element={<Profile currentUser={loggedInUser as UserType} flashMessage={flashMessage}/>} />
           <Route path="/signup" element={<SignUp flashMessage={flashMessage}/>} />
           <Route path="/login" element={<LogIn logUserIn={logUserIn} flashMessage={flashMessage}/>} />
           <Route path="/newdog" element={<AddDog flashMessage={flashMessage} currentUser={loggedInUser as UserType} />} />
           <Route path="/dog/:dogId" element={<DogForm flashMessage={flashMessage} currentUser={loggedInUser  as UserType} />} />
-          <Route path="/clientadmin/:user_id" element={<DogForm flashMessage={flashMessage} currentUser={loggedInUser  as UserType} />} />
-          <Route path="/dogadmin/:user_id" element={<DogForm flashMessage={flashMessage} currentUser={loggedInUser  as UserType} />} />
+          <Route path="/clientadmin/:user_id" element={<AdminClientInfo currentUser={loggedInUser  as UserType} />} />
+          <Route path="/dogadmin/:dog_id" element={<AdminDogInfo currentUser={loggedInUser  as UserType}/>} />
 
-          <Route path="/admin" element={<Admin isLoggedIn={isLoggedIn} isAdmin={isAdmin} flashMessage={flashMessage} />} />
+          <Route path="/admin" element={<Admin isLoggedIn={isLoggedIn} isAdmin={isAdmin} flashMessage={flashMessage} currentUser={loggedInUser as UserType}/>} />
         </Routes>
       </div>
     </>

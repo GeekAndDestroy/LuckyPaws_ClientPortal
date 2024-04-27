@@ -1,28 +1,28 @@
-import React, { ChangeEventHandler } from "react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-// import CloudinaryUploadWidget from "./CloudinaryUploadWidget";
+
 import { Cloudinary } from "@cloudinary/url-gen";
-// import CloudinaryUploadWidget from "./CloudinaryUploadWidget";
-import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
-import { dog } from "@cloudinary/url-gen/qualifiers/focusOn";
-import { CategoryType, DogType, UserType } from "../types";
-import { editDog, getDogById } from "../lib/apiWrapper";
+
+// import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
+// import { dog } from "@cloudinary/url-gen/qualifiers/focusOn";
+import { CategoryType, DogType, ImageType, UserType } from "../types";
+import { editDog, getDogById, uploadImage, uploadImageToCloudinary } from "../lib/apiWrapper";
 import { set } from "@cloudinary/url-gen/actions/variable";
 
-type DogFormProps = {
-    currentUser: UserType ;
-    flashMessage: (newMessage:string|undefined, newCategory:CategoryType|undefined) => void
-}
 
-const cld = new Cloudinary({
-    cloud: {
-        cloudName: "djchjozvp",
-    },
-});
+// Cloudinary preset - np97uesu
+
+type DogFormProps = {
+    currentUser: UserType;
+    flashMessage: (
+        newMessage: string | undefined,
+        newCategory: CategoryType | undefined
+    ) => void;
+};
+
 
 export default function DogForm({ currentUser, flashMessage }: DogFormProps) {
-    const { dogId } = useParams(); 
+    const { dogId } = useParams();
     const navigate = useNavigate();
 
     const [isSpayedOrNeutered, setIsSpayedOrNeutered] = useState(false);
@@ -56,13 +56,18 @@ export default function DogForm({ currentUser, flashMessage }: DogFormProps) {
     const [dogFormData, setDogFormData] = useState<Partial<DogType>>({});
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDogFormData({
-            ...dogFormData, 
+            ...dogFormData,
             [e.target.id]: e.target.value,
         });
     };
 
-    const [dogFormTextAreaData, setDogFormTextAreaData] = useState<Partial<DogType>>({});
-    const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const [dogFormTextAreaData, setDogFormTextAreaData] = useState<
+        Partial<DogType>
+    >({});
+
+    const handleTextAreaChange = (
+        e: React.ChangeEvent<HTMLTextAreaElement>
+    ) => {
         setDogFormTextAreaData({
             ...dogFormTextAreaData,
             [e.target.id]: e.target.value,
@@ -71,9 +76,8 @@ export default function DogForm({ currentUser, flashMessage }: DogFormProps) {
 
     const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
 
-        const dogSubmit:DogType= {
+        const dogSubmit: DogType = {
             name: dogFormData.name,
             breed: dogFormData.breed,
             birthday: dogFormData.birthday,
@@ -87,14 +91,14 @@ export default function DogForm({ currentUser, flashMessage }: DogFormProps) {
             feeding_schedule: dogFormTextAreaData.feeding_schedule,
             potty_schedule: dogFormTextAreaData.potty_schedule,
             crated: isCrated,
-            daily_updates: dailyUpdates
-        }
+            daily_updates: dailyUpdates,
+        };
 
         console.log(dogSubmit);
 
         let response = await editDog(
             dogSubmit as DogType,
-            parseInt(dogId ?? ''),
+            parseInt(dogId ?? ""),
             currentUser!.token
         );
         if (response.error) {
@@ -108,21 +112,29 @@ export default function DogForm({ currentUser, flashMessage }: DogFormProps) {
         }
     };
 
+
+
     useEffect(() => {
         if (!currentUser?.token) {
             console.log("Waiting for user and token...");
             return;
         }
         async function getDogInfo() {
-            let response = await getDogById(parseInt(dogId ?? ""), currentUser!.token);
+            let response = await getDogById(
+                parseInt(dogId ?? ""),
+                currentUser!.token
+            );
             if (response.data) {
                 const dog = response.data;
                 console.log(dog);
-                
-                if(!currentUser?.token){
+
+                if (!currentUser?.token) {
                     console.log("No user logged in");
-                } else if (dog.user_id !== currentUser!.user_id){
-                    flashMessage("You are not authorized to edit this profile", "danger");
+                } else if (dog.user_id !== currentUser!.user_id) {
+                    flashMessage(
+                        "You are not authorized to edit this profile",
+                        "danger"
+                    );
                     navigate("/");
                 } else {
                     setDogFormData({
@@ -147,188 +159,302 @@ export default function DogForm({ currentUser, flashMessage }: DogFormProps) {
             } else if (response.error) {
                 console.log(response.error, currentUser!.token);
                 flashMessage(response.error, "danger");
-            }
-            else {
+            } else {
                 flashMessage("An error occurred", "warning");
             }
         }
         getDogInfo();
     }, [currentUser?.token]);
 
+    // const handleUpload = (files) => {
+    //     e.preventDefault();
+    //     // Push all the axios request promise into a single array
+    //     const uploaders = files.map((file) => {
+    //         // Initial FormData
+    //         const formData = new FormData();
+    //         formData.append("file", file);
+    //         formData.append("tags", `Lucky Paws`);
+    //         formData.append("upload_preset", "np97uesu"); // Replace the preset name with your own
+    //         formData.append("api_key", String(process.env.API_KEY)); // Replace API key with your own Cloudinary key
+    //         formData.append("timestamp", String(Date.now() / 1000) || "0");
+
+    //         // Make an AJAX upload request using Axios (replace Cloudinary URL below with your own)
+    //         return axios
+    //             .post(
+    //                 "https://api.cloudinary.com/v1_1/djchjozvp/image/upload",
+    //                 formData,
+    //                 {
+    //                     headers: { "X-Requested-With": "XMLHttpRequest" },
+    //                 }
+    //             )
+    //             .then((response) => {
+    //                 const data = response.data;
+    //                 const fileURL = data.secure_url; // You should store this URL for future references in your app
+    //                 console.log(data);
+    //             });
+    //     });
+
+    //     // Once all the files are uploaded
+    //     axios.all(uploaders).then(() => {
+    //         // ... perform after upload is successful operation
+    //     });
+    // };
+
+    const [file, setFile] = useState<File>();
+    const [imageURL, setImageURL] = useState<Partial<DogType>>({});
+
+    const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        // Update the state
+        setFile(event.target.files![0]);
+    };
+
+    const handleFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        let response = await uploadImageToCloudinary(file!);
+        if (response.error) {
+            console.log(response.error);
+            flashMessage(response.error, "danger");
+        } else {
+            console.log(response.data);
+            flashMessage(`Image uploaded successfully!`, "success");
+        }
+        let imageResponse = response.data;
+        console.log("imagetest", imageResponse);
+
+        // setImage({
+        //     image_url: imageResponse.secure_url,
+        //     client_user_id: currentUser!.user_id,
+        //     description: "Dog Profile Picture",
+        //     dog_id: parseInt(dogId!),
+        // });
 
 
+        // let response2 = await uploadImage(currentUser!.token, image);
+        // if (response2.error) {
+        //     console.log(response2.error);
+        //     flashMessage(response2.error, "danger");
+        // } else {
+        //     console.log(response2.data);
+        //     flashMessage(`Image uploaded successfully!`, "success");
+        // }
+
+        setImageURL({
+            profile_pic_url: imageResponse.secure_url,
+        });
+
+        console.log(imageURL);
+
+        let response3 = await editDog(
+            imageURL,
+            parseInt(dogId ?? ""),
+            currentUser!.token
+        );
+        if (response.error) {
+            console.log(response.error);
+            flashMessage(response.error, "danger");
+        } else {
+            let newDog = response.data!;
+            flashMessage(`Picture Updated!`, "success");
+            console.log(newDog);
+        }
+
+
+    }
+        
     return (
         <div className="flex justify-center p-4">
-        <div className="hero w-96 lg:w-3/4 bg-base-200 rounded-lg">
-            <div className="hero-content text-center ">
-                <div className="max-w-md">
-                    <h1 className="text-5xl m-4 font-bold">Make Updates for {dogFormData.name}</h1>
+            <div className="hero w-96 lg:w-3/4 bg-base-200 rounded-lg">
+                <div className="hero-content text-center ">
+                    <div className="max-w-md">
+                        <h1 className="text-5xl m-4 font-bold">
+                            Make Updates for {dogFormData.name}
+                        </h1>
 
-                    <button className="btn m-4 btn-secondary shadow-lg shadow-fuchsia-800" onClick={() => navigate(`/dog/${dogId}`)}></button>
+                        <form onSubmit={handleFileUpload}>
+                            <div className="mx-auto w-80 sm:max-w-md md:max-w-lg flex flex-col">
+                                <input
+                                    type="file"
+                                    name="file"
+                                    id="file"
+                                    className="input input-bordered"
+                                    onChange={onFileChange}
+                                    
+                                />
+                                <button className="btn m-4 btn-secondary shadow-lg shadow-fuchsia-800 mx-auto w-80 sm:max-w-md md:max-w-lg flex flex-col gap-5">
+                                    Add Picture
+                                </button>
+                            </div>
+                        </form>
 
-                    <form onSubmit={handleFormSubmit}>
-                        <div className="mx-auto w-80 sm:max-w-md md:max-w-lg flex flex-col gap-5">
-                            <input
-                                type="text"
-                                name="name"
-                                id="name"
-                                placeholder="Name"
-                                value={dogFormData.name}
-                                onChange={handleInputChange}
-                                className="input input-bordered"
-                            />
-                            <input
-                                type="text"
-                                name="breed"
-                                id="breed"
-                                placeholder="Breed"
-                                value={dogFormData.breed}
-                                onChange={handleInputChange}
-                                className="input input-bordered"
-                            />
-                            <input
-                                type="text"
-                                name="birthday"
-                                id="birthday"
-                                placeholder="Birth Date (approximately)"
-                                value={dogFormData.birthday}
-                                onChange={handleInputChange}
-                                className="input input-bordered"
-                            />
-                            <select
-                                className="select select-bordered w-full max-w-xs"
-                                value={dogFormData.sex}
-                                onChange={handleGenderChange}
-                                id="sex"
-                                name="sex"
-                            >
-                                <option disabled value="">
-                                    Dog's Gender
-                                </option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </select>
-                            <div className="form-control">
-                                <label className="label cursor-pointer">
-                                    <span className="label-text">
-                                        Spayed/Neutered?
-                                    </span>
-                                    <input
-                                        type="checkbox"
-                                        id="altered"
-                                        checked={dogFormData.altered}
-                                        onChange={handleGenderCheckboxChange}
-                                        className="checkbox"
-                                    />
+                        <form onSubmit={handleFormSubmit}>
+                            <div className="mx-auto w-80 sm:max-w-md md:max-w-lg flex flex-col gap-5">
+                                <input
+                                    type="text"
+                                    name="name"
+                                    id="name"
+                                    placeholder="Name"
+                                    value={dogFormData.name}
+                                    onChange={handleInputChange}
+                                    className="input input-bordered"
+                                />
+                                <input
+                                    type="text"
+                                    name="breed"
+                                    id="breed"
+                                    placeholder="Breed"
+                                    value={dogFormData.breed}
+                                    onChange={handleInputChange}
+                                    className="input input-bordered"
+                                />
+                                <input
+                                    type="text"
+                                    name="birthday"
+                                    id="birthday"
+                                    placeholder="Birth Date (approximately)"
+                                    value={dogFormData.birthday}
+                                    onChange={handleInputChange}
+                                    className="input input-bordered"
+                                />
+                                <select
+                                    className="select select-bordered w-full max-w-xs"
+                                    value={gender}
+                                    onChange={handleGenderChange}
+                                    id="sex"
+                                    name="sex"
+                                >
+                                    <option disabled value="">
+                                        Dog's Gender
+                                    </option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                                <div className="form-control">
+                                    <label className="label cursor-pointer">
+                                        <span className="label-text">
+                                            Spayed/Neutered?
+                                        </span>
+                                        <input
+                                            type="checkbox"
+                                            id="altered"
+                                            checked={isSpayedOrNeutered}
+                                            onChange={
+                                                handleGenderCheckboxChange
+                                            }
+                                            className="checkbox"
+                                        />
+                                    </label>
+                                </div>
+                                <label className="form-control">
+                                    <textarea
+                                        className="textarea textarea-bordered h-24"
+                                        placeholder="Known Health Conditions"
+                                        name="health_conditions"
+                                        id="health_conditions"
+                                        value={dogFormTextAreaData.health_conditions}
+                                        onChange={handleTextAreaChange}
+                                    ></textarea>
                                 </label>
-                            </div>
-                            <label className="form-control">
-                                <textarea
-                                    className="textarea textarea-bordered h-24"
-                                    placeholder="Known Health Conditions"
-                                    name="health_conditions"
-                                    id="health_conditions"
-                                    value={dogFormData.health_conditions}
-                                    onChange={handleTextAreaChange}
-                                ></textarea>
-                            </label>
-                            <label className="form-control">
-                                <textarea
-                                    className="textarea textarea-bordered h-24"
-                                    placeholder="Medications"
-                                    name="medications"
-                                    id="medications"
-                                    value={dogFormData.medications}
-                                    onChange={handleTextAreaChange}
-                                ></textarea>
-                            </label>
-                            <label className="form-control">
-                                <textarea
-                                    className="textarea textarea-bordered h-24"
-                                    placeholder="Allergies"
-                                    name="allergies"
-                                    id="allergies"
-                                    value={dogFormData.allergies}
-                                    onChange={handleTextAreaChange}
-                                ></textarea>
-                            </label>
-                            <label className="form-control">
-                                <textarea
-                                    className="textarea textarea-bordered h-24"
-                                    placeholder="What are your dog's favorite activities?"
-                                    name="bn_favorite_activities"
-                                    id="bn_favorite_activities"
-                                    value={dogFormData.bn_favorite_activities}
-                                    onChange={handleTextAreaChange}
-                                ></textarea>
-                            </label>
-                            <label className="form-control">
-                                <textarea
-                                    className="textarea textarea-bordered h-24"
-                                    placeholder="Please list any behavioral issues or concerns that will help us provide the best care for your dog."
-                                    name="bn_issues"
-                                    id="bn_issues"
-                                    value={dogFormData.bn_issues}
-                                    onChange={handleTextAreaChange}
-                                ></textarea>
-                            </label>
-                            <label className="form-control">
-                                <textarea
-                                    className="textarea textarea-bordered h-24"
-                                    placeholder="What is your dog's usual feeding schedule?"
-                                    name="feeding_schedule"
-                                    id="feeding_schedule"
-                                    value={dogFormData.feeding_schedule}
-                                    onChange={handleTextAreaChange}
-                                ></textarea>
-                            </label>
-                            <label className="form-control">
-                                <textarea
-                                    className="textarea textarea-bordered h-24"
-                                    placeholder="What is your dog's usual potty schedule?"
-                                    name="potty_schedule"
-                                    id="potty_schedule"
-                                    value={dogFormData.potty_schedule}
-                                    onChange={handleTextAreaChange}
-                                ></textarea>
-                            </label>
-                            <div className="form-control">
-                                <label className="label cursor-pointer">
-                                    <span className="label-text">
-                                        Is your dog crate trained?
-                                    </span>
-                                    <input
-                                        type="checkbox"
-                                        onChange={handleCrateCheckboxChange}
-                                        className="checkbox"
-                                        checked={dogFormData.crated}
-                                    />
+                                <label className="form-control">
+                                    <textarea
+                                        className="textarea textarea-bordered h-24"
+                                        placeholder="Medications"
+                                        name="medications"
+                                        id="medications"
+                                        value={dogFormTextAreaData.medications}
+                                        onChange={handleTextAreaChange}
+                                    ></textarea>
                                 </label>
-                            </div>
-                            <div className="form-control">
-                                <label className="label cursor-pointer">
-                                    <span className="label-text">
-                                        Would you like daily updates on your dog?
-                                    </span>
-                                    <input
-                                        type="checkbox"
-                                        onChange={handleUpdatesCheckboxChange}
-                                        className="checkbox"
-                                        checked={dogFormData.daily_updates}
-                                    />
+                                <label className="form-control">
+                                    <textarea
+                                        className="textarea textarea-bordered h-24"
+                                        placeholder="Allergies"
+                                        name="allergies"
+                                        id="allergies"
+                                        value={dogFormTextAreaData.allergies}
+                                        onChange={handleTextAreaChange}
+                                    ></textarea>
                                 </label>
-                            </div>
+                                <label className="form-control">
+                                    <textarea
+                                        className="textarea textarea-bordered h-24"
+                                        placeholder="What are your dog's favorite activities?"
+                                        name="bn_favorite_activities"
+                                        id="bn_favorite_activities"
+                                        value={
+                                            dogFormTextAreaData.bn_favorite_activities
+                                        }
+                                        onChange={handleTextAreaChange}
+                                    ></textarea>
+                                </label>
+                                <label className="form-control">
+                                    <textarea
+                                        className="textarea textarea-bordered h-24"
+                                        placeholder="Please list any behavioral issues or concerns that will help us provide the best care for your dog."
+                                        name="bn_issues"
+                                        id="bn_issues"
+                                        value={dogFormTextAreaData.bn_issues}
+                                        onChange={handleTextAreaChange}
+                                    ></textarea>
+                                </label>
+                                <label className="form-control">
+                                    <textarea
+                                        className="textarea textarea-bordered h-24"
+                                        placeholder="What is your dog's usual feeding schedule?"
+                                        name="feeding_schedule"
+                                        id="feeding_schedule"
+                                        value={dogFormTextAreaData.feeding_schedule}
+                                        onChange={handleTextAreaChange}
+                                    ></textarea>
+                                </label>
+                                <label className="form-control">
+                                    <textarea
+                                        className="textarea textarea-bordered h-24"
+                                        placeholder="What is your dog's usual potty schedule?"
+                                        name="potty_schedule"
+                                        id="potty_schedule"
+                                        value={dogFormTextAreaData.potty_schedule}
+                                        onChange={handleTextAreaChange}
+                                    ></textarea>
+                                </label>
+                                <div className="form-control">
+                                    <label className="label cursor-pointer">
+                                        <span className="label-text">
+                                            Is your dog crate trained?
+                                        </span>
+                                        <input
+                                            type="checkbox"
+                                            onChange={handleCrateCheckboxChange}
+                                            className="checkbox"
+                                            checked={isCrated}
+                                        />
+                                    </label>
+                                </div>
+                                <div className="form-control">
+                                    <label className="label cursor-pointer">
+                                        <span className="label-text">
+                                            Would you like daily updates on your
+                                            dog?
+                                        </span>
+                                        <input
+                                            type="checkbox"
+                                            onChange={
+                                                handleUpdatesCheckboxChange
+                                            }
+                                            className="checkbox"
+                                            checked={dailyUpdates}
+                                        />
+                                    </label>
+                                </div>
 
-                            <button className="btn m-4 btn-secondary shadow-lg shadow-fuchsia-800">
-                                Update {dogFormData.name}
-                            </button>
-                        </div>
-                    </form>
+                                <button className="btn m-4 btn-secondary shadow-lg shadow-fuchsia-800">
+                                    Update {dogFormData.name}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-        </div>
     );
 }
-
-

@@ -42,7 +42,7 @@ export default function Profile({ flashMessage, currentUser }: ProfileProps) {
         <>
             <div className="divider">Dog(s)</div>
             <div className="flex flex-wrap">               
-                <div className="card card-compact w-1/2 lg:w-1/4 p-2 bg-base-100 shadow-xl">
+                <div className="card card-compact w-36 sm:w-60 p-4 bg-base-100 shadow-xl">
                     <figure>
                         <img
                             src="../src/assets/paw.svg"

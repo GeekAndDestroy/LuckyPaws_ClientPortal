@@ -13,12 +13,14 @@ type AdminProps = {
         newMessage: string | undefined,
         newCategory: CategoryType | undefined
     ) => void;
+    currentUser: UserType;
 };
 
 export default function Admin({
     isAdmin,
     isLoggedIn,
     flashMessage,
+    currentUser
 }: AdminProps) {
     const navigate = useNavigate();
     useEffect(() => {
@@ -49,27 +51,23 @@ export default function Admin({
     }, []);
 
     return (
-        <div className="m-10">
-            <div className="collapse collapse-plus bg-base-200 mb-4">
+        <div className="m-4">
+            <div className="collapse collapse-arrow bg-base-200 mb-4">
                 <input type="radio" name="my-accordion-3" defaultChecked />
                 <div className="collapse-title text-xl font-medium">
                     Clients
                 </div>
-                <div className="collapse-content ">
-                    <div className="flex flex-wrap w-screen">
-                        <div className="w-1/2 m-6 p-2">
-                            {clients.map(c => <AdminClientCard key={c?.user_id} client={c} />)}
-                        </div>
-                    </div>
+                <div className="collapse-content flex flex-wrap justify-around">
+                    {/* <div className="flex flex-wrap">                      */}
+                        {clients.map(c => <AdminClientCard key={c?.user_id} client={c} flashMessage={flashMessage} currentUser={currentUser}/>)}                     
+                    {/* </div> */}
                 </div>
             </div>
-            <div className="collapse collapse-plus bg-base-200">
+            <div className="collapse collapse-arrow bg-base-200">
                 <input type="radio" name="my-accordion-3" />
                 <div className="collapse-title text-xl font-medium">Dogs</div>
-                <div className="collapse-content">
-                    <div className="w-1/2 lg:w-1/4 m-10 p-2">
-                        {dogs.map(d => <AdminDogCard key={d?.dog_id} dog={d} />)}
-                    </div>
+                <div className="collapse-content flex flex-wrap justify-around">
+                    {dogs.map(d => <AdminDogCard key={d?.dog_id} dog={d} />)}
                 </div>
             </div>
         </div>

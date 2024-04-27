@@ -7,6 +7,7 @@ import {
     UserFormDataType, 
     UserType, 
     VeterinarianType } from '../types';
+import { image } from '@cloudinary/url-gen/qualifiers/source';
 
 
 const baseURL:string = 'https://luckypaws-db.onrender.com'
@@ -112,6 +113,22 @@ async function getUser(token:string):Promise<APIResponse<UserType>> {
     let error;
     try {
         const response = await apiClientTokenAuth(token).get(EditUserEndpoint)
+        data = response.data
+    } catch (err) {
+        if (axios.isAxiosError(err)){
+            error = err.response?.data.error
+        } else {
+            error = "Something went wrong"
+        }
+    }
+    return { data, error }
+}
+
+async function getUserById(id:number, token:string):Promise<APIResponse<UserType>> {
+    let data;
+    let error;
+    try {
+        const response = await apiClientTokenAuth(token).get(`${userEndpoint}/${id}`)
         data = response.data
     } catch (err) {
         if (axios.isAxiosError(err)){
@@ -396,12 +413,13 @@ async function deleteDog(id:number, token:string):Promise<APIResponse<DogType>> 
     return { data, error }
 }
 
-async function uploadImage(image:ImageType, token:string):Promise<APIResponse<ImageType>> {
+async function uploadImage(token:string, newImage:Partial<ImageType>):Promise<APIResponse<ImageType>> {
     let data;
     let error;
     try {
-        const response = await apiClientTokenAuth(token).post(imagesEndpoint, image)
+        const response = await apiClientTokenAuth(token).post(imagesEndpoint, newImage)
         data = response.data
+
     } catch (err) {
         if (axios.isAxiosError(err)) {
             error = err.response?.data.error
@@ -460,6 +478,23 @@ async function getImageByID(id:number, token:string):Promise<APIResponse<ImageTy
     return { data, error }
 }
 
+async function getAllImages():Promise<APIResponse<ImageType[]>> {
+    let data;
+    let error;
+    try {
+        const response = await apiClientNoAuth().get(imagesEndpoint)
+        data = response.data
+    } catch (err) {
+        if (axios.isAxiosError(err)){
+            error = err.response?.data.error
+        } else {
+            error = "Something went wrong"
+        }
+    }
+    return { data, error }
+}
+
+
 async function getImagesByClientUserId(id:number, token:string):Promise<APIResponse<ImageType[]>> {
     let data;
     let error;
@@ -496,7 +531,7 @@ async function uploadToCloudinary(image:Partial<ImageType>, id:number, token:str
     let data;
     let error;
     try {
-        const response = await apiClientTokenAuth(token).put(`${imagesEndpoint}/${id}`, image)
+        const response = await apiClientTokenAuth(token).post(`${imagesEndpoint}/${id}`, image)
         data = response.data
     } catch (err) {
         if (axios.isAxiosError(err)){
@@ -509,21 +544,58 @@ async function uploadToCloudinary(image:Partial<ImageType>, id:number, token:str
 }
 
 
-// export async function uploadImageToCloudinary(file: File) {
-//     const url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
-//     const fetched = await fetch(url, {
-//       method: "post",
-//       body: JSON.stringify({
-//         file,
-//         cloud_name: cloudName,
-//         upload_preset: "unsigned",
+export async function uploadImageToCloudinary(file: File) {
+    let data;
+    let error;
+
+    const url = "https://api.cloudinary.com/v1_1/djchjozvp/image/upload";
+
+    // const username = import.meta.env.VITE_API_KEY
+    // const password = import.meta.env.VITE_API_SECRET
+
+ 
+    try{
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('upload_preset', 'np97uesu')
+
+
+        const response = await fetch(url, {
+            method: "post",
+            body: formData 
+        })
+        // const response = await apiClientBasicAuth(username, password).post(url, file)
+        data = await response.json()
+        console.log(data)
+        console.log(data.url)
+    } catch (err) {
+            error = "Something went wrong"       
+    }
+    return { data, error }
+}
+
+
+// export async function uploadImageToCloudinary(file: string) {
+//     let data;
+//     let error;
+
+//     const url = "https://api.cloudinary.com/v1_1/djchjozvp/upload";
+//     try{
+//         const response = await fetch(url, {
+//             method: "post",
+//             body: JSON.stringify({
+//             file: file,
+//             upload_preset: "np97uesu",
+//             api_key: String(import.meta.env.VITE_API_KEY) 
 //       }),
-//     });
-//     const parsed = await fetched.json()
-//     console.log({
-//       parsed // 400 error, message: "Upload preset must be specified when using unsigned upload"
-//     });
-//   }
+//     })
+//     console.log(response)
+//     } catch (err) {
+//             error = "Something went wrong"       
+//     }
+//     return { data, error }
+// }
+    
 
 
 
@@ -540,6 +612,7 @@ export {
     editEmergencyContact,
     editUser,
     editVeterinarian,
+    getAllImages,
     getAllUsers,
     getDogs,
     getDogById,
@@ -549,10 +622,12 @@ export {
     getImageByID,
     getImages,
     getUser,
+    getUserById,
     getVeterinarians,
     getVeterinariansByUserID,
     login,
     register,
     updateImage,
-    uploadImage
+    uploadImage,
+    uploadToCloudinary,
 }
