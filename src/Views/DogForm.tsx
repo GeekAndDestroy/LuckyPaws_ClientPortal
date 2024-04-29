@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { Cloudinary } from "@cloudinary/url-gen";
+// import { Cloudinary } from "@cloudinary/url-gen";
 
 // import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
 // import { dog } from "@cloudinary/url-gen/qualifiers/focusOn";
-import { CategoryType, DogType, ImageType, UserType } from "../types";
-import { editDog, getDogById, uploadImage, uploadImageToCloudinary } from "../lib/apiWrapper";
-import { set } from "@cloudinary/url-gen/actions/variable";
+import { CategoryType, DogType, UserType } from "../types";
+import { editDog, getDogById, uploadImageToCloudinary } from "../lib/apiWrapper";
+// import { set } from "@cloudinary/url-gen/actions/variable";
 
 
 // Cloudinary preset - np97uesu
@@ -166,100 +166,95 @@ export default function DogForm({ currentUser, flashMessage }: DogFormProps) {
         getDogInfo();
     }, [currentUser?.token]);
 
-    // const handleUpload = (files) => {
-    //     e.preventDefault();
-    //     // Push all the axios request promise into a single array
-    //     const uploaders = files.map((file) => {
-    //         // Initial FormData
-    //         const formData = new FormData();
-    //         formData.append("file", file);
-    //         formData.append("tags", `Lucky Paws`);
-    //         formData.append("upload_preset", "np97uesu"); // Replace the preset name with your own
-    //         formData.append("api_key", String(process.env.API_KEY)); // Replace API key with your own Cloudinary key
-    //         formData.append("timestamp", String(Date.now() / 1000) || "0");
-
-    //         // Make an AJAX upload request using Axios (replace Cloudinary URL below with your own)
-    //         return axios
-    //             .post(
-    //                 "https://api.cloudinary.com/v1_1/djchjozvp/image/upload",
-    //                 formData,
-    //                 {
-    //                     headers: { "X-Requested-With": "XMLHttpRequest" },
-    //                 }
-    //             )
-    //             .then((response) => {
-    //                 const data = response.data;
-    //                 const fileURL = data.secure_url; // You should store this URL for future references in your app
-    //                 console.log(data);
-    //             });
-    //     });
-
-    //     // Once all the files are uploaded
-    //     axios.all(uploaders).then(() => {
-    //         // ... perform after upload is successful operation
-    //     });
-    // };
 
     const [file, setFile] = useState<File>();
-    const [imageURL, setImageURL] = useState<Partial<DogType>>({});
+    // const [imageURL, setImageURL] = useState<Partial<DogType>>({});
 
     const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         // Update the state
         setFile(event.target.files![0]);
     };
 
+    // const handleFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
+    //     e.preventDefault();
+
+    //     let response = await uploadImageToCloudinary(file!);
+    //     if (response.error) {
+    //         console.log(response.error);
+    //         flashMessage(response.error, "danger");
+    //     } else {
+    //         console.log(response.data);
+    //         flashMessage(`Image uploaded successfully!`, "success");
+    //     }
+    //     let imageResponse = response.data;
+    //     console.log("imagetest", imageResponse);
+
+
+    //     setImageURL({
+    //         profile_pic_url: imageResponse.secure_url,
+    //     });
+
+    //     console.log(imageURL);
+
+    //     let response3 = await editDog(
+    //         imageURL,
+    //         parseInt(dogId ?? ""),
+    //         currentUser!.token
+    //     );
+    //     if (response3.error) {
+    //         console.log(response3.error);
+    //         flashMessage(response3.error, "danger");
+    //     } else {
+    //         let newDog = response3.data!;
+    //         flashMessage(`Picture Updated!`, "success");
+    //         console.log(newDog);
+    //     }
+    // }
+
     const handleFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        let response = await uploadImageToCloudinary(file!);
-        if (response.error) {
-            console.log(response.error);
-            flashMessage(response.error, "danger");
-        } else {
-            console.log(response.data);
-            flashMessage(`Image uploaded successfully!`, "success");
+        let imageURL = {}
+
+        try {
+            let response = await uploadImageToCloudinary(file!);
+            if (response.error) {
+                console.log(response.error);
+                flashMessage(response.error, "danger");
+            } else {
+                console.log(response.data);
+                flashMessage('Image uploaded successfully!', "success");
+                let imageResponse = response.data;
+                console.log("imagetest", imageResponse);
+    
+                imageURL = ({
+                    "profile_pic_url": imageResponse.secure_url,
+                });
+                
+                console.log("after setImageUrl", imageURL);
+            }
+
+        } catch (error) {
+            console.log(error);
+            flashMessage("An error occurred", "danger");
+        } finally {
+            
+            let response3 = await editDog(
+                imageURL,
+                parseInt(dogId!),
+                currentUser!.token
+            );
+            if (response3.error) {
+                console.log(response3.error);
+                flashMessage(response3.error, "danger");
+            } else {
+                let newDog = response3.data!;
+                flashMessage(`Picture Updated!`, "success");
+                console.log("newDog", newDog);
+                console.log("after editDog", imageURL);
+            }
         }
-        let imageResponse = response.data;
-        console.log("imagetest", imageResponse);
-
-        // setImage({
-        //     image_url: imageResponse.secure_url,
-        //     client_user_id: currentUser!.user_id,
-        //     description: "Dog Profile Picture",
-        //     dog_id: parseInt(dogId!),
-        // });
-
-
-        // let response2 = await uploadImage(currentUser!.token, image);
-        // if (response2.error) {
-        //     console.log(response2.error);
-        //     flashMessage(response2.error, "danger");
-        // } else {
-        //     console.log(response2.data);
-        //     flashMessage(`Image uploaded successfully!`, "success");
-        // }
-
-        setImageURL({
-            profile_pic_url: imageResponse.secure_url,
-        });
-
-        console.log(imageURL);
-
-        let response3 = await editDog(
-            imageURL,
-            parseInt(dogId ?? ""),
-            currentUser!.token
-        );
-        if (response.error) {
-            console.log(response.error);
-            flashMessage(response.error, "danger");
-        } else {
-            let newDog = response.data!;
-            flashMessage(`Picture Updated!`, "success");
-            console.log(newDog);
-        }
-
-
+        console.log("after try block", imageURL);
     }
         
     return (

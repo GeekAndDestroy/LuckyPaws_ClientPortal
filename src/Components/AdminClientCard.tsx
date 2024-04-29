@@ -1,6 +1,6 @@
 // Assume everything is written with TailwindCSS and DaisyUI
-import { useState, useEffect } from "react";
-import { CategoryType, DogType, ImageType, UserType } from "../types";
+import { useState } from "react";
+import { CategoryType, ImageType, UserType } from "../types";
 import { uploadImage, uploadImageToCloudinary } from "../lib/apiWrapper";
 
 type AdminClientCardProps = {
@@ -15,7 +15,6 @@ type AdminClientCardProps = {
 export default function AdminClientCard({ client, flashMessage, currentUser }: AdminClientCardProps) {
 
     const [file, setFile] = useState<File>();
-    const [imageURL, setImageURL] = useState<Partial<DogType>>({});
     const [image, setImage] = useState<Partial<ImageType>>({});
 
     const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,7 +1,7 @@
 // Assume everything is written with TailwindCSS and DaisyUI
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { deleteUser, getUser, editUser } from "../lib/apiWrapper";
+import { useNavigate } from "react-router-dom";
+import { getUser, editUser } from "../lib/apiWrapper";
 import { CategoryType, UserType } from "../types";
 
 type ProfileInfoProps = {

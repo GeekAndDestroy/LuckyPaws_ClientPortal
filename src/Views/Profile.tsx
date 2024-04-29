@@ -31,7 +31,7 @@ export default function Profile({ flashMessage, currentUser }: ProfileProps) {
             } else if (response.error) {
                 console.log(response.error, "danger");
             } else {
-                flashMessage("An Error Occured", "warning");
+                flashMessage("An Error Occurred", "warning");
             }
         }
         getDogs();
@@ -41,8 +41,8 @@ export default function Profile({ flashMessage, currentUser }: ProfileProps) {
     return (
         <>
             <div className="divider">Dog(s)</div>
-            <div className="flex flex-wrap">               
-                <div className="card card-compact w-36 sm:w-60 p-4 bg-base-100 shadow-xl">
+            <div className="flex flex-wrap justify-around">               
+                <div className="card card-compact w-36 sm:w-60 p-4 bg-base-100 shadow-xl max-h-48 m-2">
                     <figure>
                         <img
                             src="../src/assets/paw.svg"
@@ -59,8 +59,8 @@ export default function Profile({ flashMessage, currentUser }: ProfileProps) {
                         </div>
                     </div>
                 </div>
-                <div className="w-1/2 lg:w-1/4 p-2">
-                    {dogs.map( d => <DogCard key={d.dog_id} dog={d} currentUser={currentUser} flashMessage={flashMessage} />)}
+                <div className="w-36 sm:w-60">
+                    {dogs.map( d => <DogCard key={d.dog_id} dog={d} />)}
                 </div>
             </div>
             <div className="divider">Profile</div>

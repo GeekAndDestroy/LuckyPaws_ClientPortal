@@ -1,6 +1,5 @@
-// Assume everything is written with TailwindCSS and DaisyUI
-import { useState, useEffect } from "react";
-import { CategoryType, DogType, UserType } from "../types"
+
+import { DogType } from "../types"
 
 
 type AdminDogCardProps = {
@@ -9,7 +8,7 @@ type AdminDogCardProps = {
 
 export default function AdminDogCard({ dog }: AdminDogCardProps) {
   return (
-    <div className="card card-compact bg-base-100 shadow-xl m-1  w-36 sm:w-60 p-4">
+    <div className="card card-compact bg-base-100 shadow-xl m-1  w-36 sm:w-60">
       <figure><img src={dog!.profile_pic_url} alt="Dog" /></figure>
       <div className="card-body flex items-center">
         <div className="card-title">

@@ -3,11 +3,10 @@ import {
     DogType, 
     EmergencyContactType,
     ImageType, 
-    LogInFormDataType, 
     UserFormDataType, 
     UserType, 
     VeterinarianType } from '../types';
-import { image } from '@cloudinary/url-gen/qualifiers/source';
+
 
 
 const baseURL:string = 'https://luckypaws-db.onrender.com'
@@ -567,10 +566,11 @@ export async function uploadImageToCloudinary(file: File) {
         // const response = await apiClientBasicAuth(username, password).post(url, file)
         data = await response.json()
         console.log(data)
-        console.log(data.url)
+        console.log(data.secure_url)
+        console.log(data.public_id)
     } catch (err) {
             error = "Something went wrong"       
-    }
+    } 
     return { data, error }
 }
 
@@ -619,6 +619,7 @@ export {
     getDogsByUserID,
     getEmergencyContactByUserID,
     getEmergencyContacts,
+    getImagesByClientUserId,
     getImageByID,
     getImages,
     getUser,
