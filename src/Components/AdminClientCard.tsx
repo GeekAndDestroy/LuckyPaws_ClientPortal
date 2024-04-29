@@ -76,7 +76,7 @@ export default function AdminClientCard({ client, flashMessage, currentUser }: A
                     {client!.first_name} {client!.last_name}
                 </h2>
                 <div className="card-actions justify-center">
-                    <button className="btn btn-secondary shadow-md shadow-fuchsia-800" onClick={() => window.location.href = `/clientadmin/${client?.user_id}`}>
+                    <button className="btn btn-secondary shadow-md shadow-fuchsia-800 mx-auto w-44 mb-2" onClick={() => window.location.href = `/clientadmin/${client?.user_id}`}>
                         View Info
                     </button>
                     <form onSubmit={handleFileUpload}>
@@ -85,7 +85,7 @@ export default function AdminClientCard({ client, flashMessage, currentUser }: A
                                     type="file"
                                     name="file"
                                     id="file"
-                                    className="input input-bordered"
+                                    className="file-input file-input-bordered"
                                     onChange={onFileChange}
                                     
                                 />

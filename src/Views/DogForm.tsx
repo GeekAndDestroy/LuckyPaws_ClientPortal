@@ -272,7 +272,8 @@ export default function DogForm({ currentUser, flashMessage }: DogFormProps) {
                                     type="file"
                                     name="file"
                                     id="file"
-                                    className="input input-bordered"
+                                    className="file-input file-input-bordered"
+                                    // className="input input-bordered"
                                     onChange={onFileChange}
                                     
                                 />
