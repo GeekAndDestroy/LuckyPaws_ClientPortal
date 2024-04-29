@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 // import { Cloudinary } from "@cloudinary/url-gen";
-
 // import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
 // import { dog } from "@cloudinary/url-gen/qualifiers/focusOn";
+// import { set } from "@cloudinary/url-gen/actions/variable";
 import { CategoryType, DogType, UserType } from "../types";
 import { editDog, getDogById, uploadImageToCloudinary } from "../lib/apiWrapper";
-// import { set } from "@cloudinary/url-gen/actions/variable";
 
 
 // Cloudinary preset - np97uesu
@@ -106,7 +105,7 @@ export default function DogForm({ currentUser, flashMessage }: DogFormProps) {
             flashMessage(response.error, "danger");
         } else {
             let newDog = response.data!;
-            flashMessage(`Welcome, ${newDog.name}!`, "success");
+            flashMessage(`${newDog.name} has been updated!`, "success");
             console.log(newDog);
             navigate(`/dog/${newDog.dog_id}`);
         }
@@ -228,7 +227,7 @@ export default function DogForm({ currentUser, flashMessage }: DogFormProps) {
                 console.log("imagetest", imageResponse);
     
                 imageURL = ({
-                    "profile_pic_url": imageResponse.secure_url,
+                    "profile_pic_url": imageResponse.public_id,
                 });
                 
                 console.log("after setImageUrl", imageURL);

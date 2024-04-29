@@ -24,6 +24,7 @@ export default function AdminClientCard({ client, flashMessage, currentUser }: A
 
     const handleFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        
 
         let response = await uploadImageToCloudinary(file!);
         if (response.error) {
