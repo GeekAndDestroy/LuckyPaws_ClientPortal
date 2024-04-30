@@ -6,6 +6,7 @@ import {focusOn} from "@cloudinary/url-gen/qualifiers/gravity";
 import {FocusOn} from "@cloudinary/url-gen/qualifiers/focusOn";
 
 import { ImageType } from "../types";
+import { generativeRestore } from "@cloudinary/url-gen/actions/effect";
 
 
 type ImageCardProps = {
@@ -23,7 +24,7 @@ export default function ImageCard({image}: ImageCardProps) {
     return (
         // <></>
         <div className="z-0 bg-base-100 shadow-xl">
-            <AdvancedImage cldImg={myImage.resize(fill().width(240).height(240).gravity(focusOn(FocusOn.face())))} />
+            <AdvancedImage cldImg={myImage.resize(fill().width(240).height(240).gravity(focusOn(FocusOn.face()))).effect(generativeRestore())} />
         </div>
     );
 }

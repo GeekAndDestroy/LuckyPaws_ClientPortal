@@ -5,6 +5,7 @@ import {focusOn} from "@cloudinary/url-gen/qualifiers/gravity";
 import {FocusOn} from "@cloudinary/url-gen/qualifiers/focusOn";
 
 import { DogType } from "../types"
+import { generativeRestore } from "@cloudinary/url-gen/actions/effect";
 
 
 type AdminDogCardProps = {
@@ -23,7 +24,7 @@ export default function AdminDogCard({ dog }: AdminDogCardProps) {
 
   return (
     <div className="card card-compact bg-base-100 shadow-xl m-1  w-36 sm:w-60">
-      <figure><AdvancedImage cldImg={myImage.resize(fill().width(240).height(240).gravity(focusOn(FocusOn.face())))} /></figure>
+      <figure><AdvancedImage cldImg={myImage.resize(fill().width(240).height(240).gravity(focusOn(FocusOn.face()))).effect(generativeRestore())} /></figure>
       <div className="card-body flex items-center">
         <div className="card-title">
           {dog!.name}
