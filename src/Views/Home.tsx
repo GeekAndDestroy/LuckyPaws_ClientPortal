@@ -19,15 +19,16 @@ export default function Home({currentUser}: HomeProps) {
                 setImages(response.data);
             }
         }
+        console.log(images)
         getImages();
     }, []);
 
 return (
     <div className="flex flex-wrap w-screen">
-        <div className="w-1/2 md:w-1/4 p-2">
+        
             {images.map(i => <ImageCard key={i?.image_id} image={i} />)}
-        </div>
-        <div className="w-1/2 md:w-1/4 p-2">
+        
+        {/* <div className="w-1/2 md:w-1/4 p-2">
             <ImageCard2 />
         </div>
         <div className="w-1/2 md:w-1/4 p-2">
@@ -47,7 +48,7 @@ return (
         </div>
         <div className="w-1/2 md:w-1/4 p-2">
             <ImageCard2 />
-        </div>
+        </div> */}
     </div>
 )
 }

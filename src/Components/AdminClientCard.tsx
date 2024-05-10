@@ -12,14 +12,22 @@ type AdminClientCardProps = {
     currentUser: UserType;
 };
 
-export default function AdminClientCard({ client, flashMessage, currentUser }: AdminClientCardProps) {
-
+export default function AdminClientCard({
+    client,
+    flashMessage,
+    currentUser,
+}: AdminClientCardProps) {
     const [file, setFile] = useState<File>();
     const [image, setImage] = useState<Partial<ImageType>>({});
+    const [imageDesc, setImageDesc] = useState<string>("");
 
     const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         // Update the state
         setFile(event.target.files![0]);
+    };
+
+    const onDescChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setImageDesc(event.target.value);
     };
 
     const handleFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -38,11 +46,13 @@ export default function AdminClientCard({ client, flashMessage, currentUser }: A
         console.log("imagetest", imageResponse);
 
         setImage({
-            image_url: imageResponse.secure_url,
-            client_user_id: currentUser!.user_id,
-            description: "Dog Profile Picture",
+            image_url: imageResponse.public_id,
+            client_user_id: client!.user_id,
+            description: imageDesc,
         });
 
+        console.log("description after setImage", imageDesc);
+        console.log("after setImage", image);
 
         let response2 = await uploadImage(currentUser!.token, image);
         if (response2.error) {
@@ -52,7 +62,6 @@ export default function AdminClientCard({ client, flashMessage, currentUser }: A
             console.log(response2.data);
             flashMessage(`Image uploaded successfully!`, "success");
         }
-
 
         // console.log(imageURL);
 
@@ -68,34 +77,96 @@ export default function AdminClientCard({ client, flashMessage, currentUser }: A
         //     let newDog = response.data!;
         //     flashMessage(`Picture Updated!`, "success");
         //     console.log(newDog);
-        }
+    };
 
     return (
-        <div className="card card-compact bg-base-100 shadow-xl m-1 w-36 sm:w-60 p-4">
+        <div className="card card-compact bg-base-100 shadow-xl m-1 w-36 sm:w-60">
             <div className="card-body ">
-                <h2 className="card-title text-center">
+                <p className="card-title text-center">
                     {client!.first_name} {client!.last_name}
-                </h2>
+                </p>
                 <div className="card-actions justify-center">
-                    <button className="btn btn-secondary shadow-md shadow-fuchsia-800 mx-auto w-44 mb-2" onClick={() => window.location.href = `/clientadmin/${client?.user_id}`}>
+                    <button
+                        className="btn btn-secondary shadow-md shadow-fuchsia-800 w-full"
+                        onClick={() =>
+                            (window.location.href = `/clientadmin/${client?.user_id}`)
+                        }
+                    >
                         View Info
                     </button>
-                    <form onSubmit={handleFileUpload}>
-                            <div className="mx-auto w-44 flex flex-col">
-                                <input
-                                    type="file"
-                                    name="file"
-                                    id="file"
-                                    className="file-input file-input-bordered"
-                                    onChange={onFileChange}
-                                    
-                                />
-                                <button className="btn m-4 btn-secondary shadow-lg shadow-fuchsia-800 mx-auto w-44 flex flex-col gap-5">
-                                    Add Picture
-                                </button>
+                    <button
+                        className="btn  btn-secondary shadow-lg shadow-fuchsia-800 w-full"
+                        onClick={() =>
+                            (
+                                document.getElementById(
+                                    "my_modal_5"
+                                ) as HTMLDialogElement
+                            ).showModal()
+                        }
+                    >
+                        Update Client
+                    </button>
+                    <dialog
+                        id="my_modal_5"
+                        className="modal modal-bottom sm:modal-middle"
+                    >
+                        <div className="modal-box">
+                            <button
+                                className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                                onClick={() =>
+                                    (
+                                        document.getElementById(
+                                            "my_modal_5"
+                                        ) as HTMLDialogElement
+                                    ).close()
+                                }
+                            >
+                                ✕
+                            </button>
+                            <h3 className="font-bold text-lg">
+                                Client Update:
+                            </h3>
+                            <p className="">
+                                Enter picture and description to send to{" "}
+                                {client?.first_name} {client?.last_name} below.
+                            </p>
+                            <div className="modal-action">
+                                <form
+                                    method="dialog"
+                                    onSubmit={handleFileUpload}
+                                >
+                                    <div className="w-full">
+                                        <input
+                                            type="file"
+                                            name="file"
+                                            id="file"
+                                            className="file-input file-input-bordered w-full"
+                                            onChange={onFileChange}
+                                        />
+                                        <textarea
+                                            className="textarea textarea-bordered w-full my-2"
+                                            name="description"
+                                            id="description"
+                                            placeholder="Enter Update Description"
+                                            onChange={onDescChange}
+                                        ></textarea>
+                                    </div>
+                                    <button
+                                        className="btn btn-secondary shadow-lg shadow-fuchsia-800 w-full"
+                                        onClick={() =>
+                                            (
+                                                document.getElementById(
+                                                    "my_modal_5"
+                                                ) as HTMLDialogElement
+                                            ).close()
+                                        }
+                                    >
+                                        Send Update
+                                    </button>
+                                </form>
                             </div>
-                        </form>
-
+                        </div>
+                    </dialog>
                 </div>
             </div>
         </div>

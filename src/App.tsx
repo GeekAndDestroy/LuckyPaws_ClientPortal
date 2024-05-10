@@ -97,8 +97,8 @@ const logUserOut = () => {
     <>
       {isLoggedIn && <Navigation isLoggedIn={isLoggedIn} logUserOut={logUserOut} isAdmin={isAdmin} />}
       {message && <AlertMessage message={message} category={category} flashMessage={flashMessage} />}
-      
-      <div>
+{/*       
+      <div> */}
         <Routes>
           <Route path="/" element={<Home currentUser={loggedInUser as UserType}/>} />
           <Route path="/gallery" element={<Gallery />} />
@@ -109,10 +109,9 @@ const logUserOut = () => {
           <Route path="/dog/:dogId" element={<DogForm flashMessage={flashMessage} currentUser={loggedInUser  as UserType} />} />
           <Route path="/clientadmin/:user_id" element={<AdminClientInfo currentUser={loggedInUser  as UserType} />} />
           <Route path="/dogadmin/:dog_id" element={<AdminDogInfo currentUser={loggedInUser  as UserType}/>} />
-
           <Route path="/admin" element={<Admin isLoggedIn={isLoggedIn} isAdmin={isAdmin} flashMessage={flashMessage} currentUser={loggedInUser as UserType}/>} />
         </Routes>
-      </div>
+      {/* </div> */}
     </>
   )
 }

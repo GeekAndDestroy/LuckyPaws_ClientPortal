@@ -43,19 +43,19 @@ export default function Profile({ flashMessage, currentUser }: ProfileProps) {
             <div className="divider">Dog(s)</div>
             <div className="">
                 <div className="flex flex-wrap justify-around">
-                    <div className="card card-compact w-36 sm:w-60 p-4 bg-base-100 shadow-xl max-h-48 m-2">
+                    <div className="card card-compact w-36 lg:h-80 sm:w-60 p-4 bg-base-100 shadow-xl  m-2">
                         <figure>
                             <img
                                 src="../src/assets/paw.svg"
-                                height="100"
-                                width="100"
+                                height="150"
+                                width="150"
                                 alt="Paw"
                             />
                         </figure>
                         <div className="card-body">
-                            <div className="card-actions justify-center align-center">
+                            <div className="card-actions justify-center align-bottom">
                                 <button
-                                    className="btn btn-secondary shadow-md shadow-fuchsia-800"
+                                    className="btn btn-secondary shadow-md shadow-fuchsia-800 "
                                     onClick={() =>
                                         (window.location.href = "./newdog")
                                     }
