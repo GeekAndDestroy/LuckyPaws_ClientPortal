@@ -17,6 +17,7 @@ export default {
                     success: "#00ff00",
                     warning: "#00ff00",
                     error: "#ff0000",
+                    "--glass-opacity": "30px",
                 },
                 light: {
                   "primary": "#00ff00",

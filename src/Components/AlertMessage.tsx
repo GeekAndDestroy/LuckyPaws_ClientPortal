@@ -16,7 +16,7 @@ export default function AlertMessage({
 }: AlertMessageProps) {
     return (
         <div className="toast toast-center toast-middle z-50">
-            <div className={`alert alert-${category}`}>
+            <div className={`alert alert-${category} glass`}>
                 <div className="flex-1">
                     <label>{message}</label>
                 </div>
