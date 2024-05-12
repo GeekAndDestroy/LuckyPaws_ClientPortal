@@ -23,9 +23,10 @@ export default function ImageCard({image}: ImageCardProps) {
       const myImage = cld.image(image!.image_url); 
     return (
         // <></>
-        <div className="w-2/5 md:w-1/4 p-1">
-        <div className="z-0 bg-base-100 shadow-xl">
-            <AdvancedImage cldImg={myImage.resize(fill().width(250).height(250).gravity(focusOn(FocusOn.face()))).effect(generativeRestore())} />
+        // <div className="w-1/2 md:w-1/4">
+        <div className="w-max mt-2">
+        <div className="z-0 bg-base-100 shadow-xl mx-1">
+            <AdvancedImage cldImg={myImage.resize(fill().width(230).height(230).gravity(focusOn(FocusOn.face()))).effect(generativeRestore())} />
         </div>
         </div>
     );

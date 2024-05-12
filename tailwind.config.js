@@ -29,6 +29,10 @@ export default {
                   "success": "#00ff00",
                   "warning": "#00ff00",
                   "error": "#ff0000",
+                  "--glass-opacity": "30px",
+                  "#file-upload-button": {
+                    "background-color": "#E200E6",
+                  },
                            },
             },
         ],
