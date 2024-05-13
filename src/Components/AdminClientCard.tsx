@@ -99,7 +99,7 @@ export default function AdminClientCard({
                         onClick={() =>
                             (
                                 document.getElementById(
-                                    "update_client_modal"
+                                    `update_client_modal_${client?.user_id}`
                                 ) as HTMLDialogElement
                             ).showModal()
                         }
@@ -107,7 +107,7 @@ export default function AdminClientCard({
                         Update Client
                     </button>
                     <dialog
-                        id="update_client_modal"
+                        id={`update_client_modal_${client?.user_id}`}
                         className="modal modal-bottom sm:modal-middle"
                     >
                         <div className="modal-box glass">
@@ -116,7 +116,7 @@ export default function AdminClientCard({
                                 onClick={() =>
                                     (
                                         document.getElementById(
-                                            "update_client_modal"
+                                            `update_client_modal_${client?.user_id}`
                                         ) as HTMLDialogElement
                                     ).close()
                                 }
@@ -156,7 +156,7 @@ export default function AdminClientCard({
                                         onClick={() =>
                                             (
                                                 document.getElementById(
-                                                    "update_client_modal"
+                                                    `update_client_modal_${client?.user_id}`
                                                 ) as HTMLDialogElement
                                             ).close()
                                         }
