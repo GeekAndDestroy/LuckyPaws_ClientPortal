@@ -47,7 +47,7 @@ export default function Gallery({currentUser}: GalleryProps) {
   
     return (
         <div className="flex flex-wrap w-screen justify-center">       
-            {images.map(i => <ImageCard key={i?.image_id} image={i} />)}
+            {images.map(i => <ImageCard key={i?.image_id} image={i} />).reverse()}
     </div>
   )
 }
