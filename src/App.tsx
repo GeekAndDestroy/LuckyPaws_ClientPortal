@@ -101,7 +101,7 @@ const logUserOut = () => {
       <div> */}
         <Routes>
           <Route path="/" element={<Home currentUser={loggedInUser as UserType}/>} />
-          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/gallery" element={<Gallery currentUser={loggedInUser as UserType}/>} />
           <Route path="/profile" element={<Profile currentUser={loggedInUser as UserType} flashMessage={flashMessage}/>} />
           <Route path="/signup" element={<SignUp flashMessage={flashMessage}/>} />
           <Route path="/login" element={<LogIn logUserIn={logUserIn} flashMessage={flashMessage}/>} />

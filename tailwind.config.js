@@ -17,7 +17,9 @@ export default {
                     success: "#00ff00",
                     warning: "#00ff00",
                     error: "#ff0000",
-                    "--glass-opacity": "30px",
+                    "--glass-opacity": "5%",
+                    "--glass-reflex-opacity": "3%",
+                    "--glass-blur": "25px",
                 },
                 light: {
                   "primary": "#00ff00",
@@ -29,7 +31,9 @@ export default {
                   "success": "#00ff00",
                   "warning": "#00ff00",
                   "error": "#ff0000",
-                  "--glass-opacity": "30px",
+                  "--glass-opacity": "5%",
+                  "--glass-reflex-opacity": "3%",
+                  "--glass-blur": "25px",
                   "#file-upload-button": {
                     "background-color": "#E200E6",
                   },

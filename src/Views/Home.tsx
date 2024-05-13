@@ -3,8 +3,7 @@ import { getAllImages } from "../lib/apiWrapper"
 import ImageCard from "../Components/ImageCard"
 import { ImageType, UserType } from "../types";
 import { useEffect, useState } from "react";
-import AdminDogCard from "../Components/AdminDogCard";
-import ImageCard2 from "../Components/ImageCard2";
+
 
 type HomeProps = {currentUser: UserType;}
 
@@ -25,30 +24,7 @@ export default function Home({currentUser}: HomeProps) {
 
 return (
     <div className="flex flex-wrap w-screen justify-center">
-        
             {images.map(i => <ImageCard key={i?.image_id} image={i} />)}
-        
-        {/* <div className="w-1/2 md:w-1/4 p-2">
-            <ImageCard2 />
-        </div>
-        <div className="w-1/2 md:w-1/4 p-2">
-            <ImageCard2 />
-        </div>
-        <div className="w-1/2 md:w-1/4 p-2">
-            <ImageCard2 />
-        </div>
-        <div className="w-1/2 md:w-1/4 p-2">
-            <ImageCard2 />
-        </div>
-        <div className="w-1/2 md:w-1/4 p-2">
-            <ImageCard2 />
-        </div>
-        <div className="w-1/2 md:w-1/4 p-2">
-            <ImageCard2 />
-        </div>
-        <div className="w-1/2 md:w-1/4 p-2">
-            <ImageCard2 />
-        </div> */}
     </div>
 )
 }
