@@ -55,7 +55,7 @@ export default function LogIn({ flashMessage, logUserIn }: LogInProps) {
     return (
         <div className="mx-auto w-full lg:w-1/2 md:p-10 py-5 md:py-0">
             <img
-                src="/src/assets/luckypawslogo.png"
+                src="/assets/luckypawslogo.png"
                 className="mx-auto pt-20"
                 width="200"
                 height="200"

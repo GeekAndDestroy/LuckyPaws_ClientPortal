@@ -69,7 +69,7 @@ export default function Navigation({ logUserOut, isAdmin }: NavigationProps) {
             </div>
             <div className="navbar-center">
                 <img
-                    src="/src/assets/luckypawslogo.png"
+                    src="/assets/luckypawslogo.png"
                     width="80"
                     height="80"
                 />

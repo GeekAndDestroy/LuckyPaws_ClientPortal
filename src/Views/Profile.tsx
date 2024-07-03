@@ -46,7 +46,7 @@ export default function Profile({ flashMessage, currentUser }: ProfileProps) {
                     <div className="card card-compact w-36 lg:h-80 sm:w-60 p-4 bg-base-100 shadow-xl  m-2">
                         <figure>
                             <img
-                                src="../src/assets/paw.svg"
+                                src="/assets/paw.svg"
                                 height="150"
                                 width="150"
                                 alt="Paw"
