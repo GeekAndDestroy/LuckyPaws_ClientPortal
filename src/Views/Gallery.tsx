@@ -3,12 +3,12 @@ import { getImagesByClientUserId } from "../lib/apiWrapper"
 import ImageCard from "../Components/ImageCard"
 import { ImageType, UserType } from "../types";
 import { useEffect, useState } from "react";
-import ImageCard2 from "../Components/ImageCard2"
+
 
 
 type GalleryProps = {currentUser: UserType;}
 
-export default function Gallery({currentUser}: GalleryProps) {
+export default function Gallery({}: GalleryProps) {
     
     const [images, setImages] = useState<Partial<ImageType[]>>([]);
     // const id = currentUser.user_id;

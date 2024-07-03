@@ -1,6 +1,6 @@
 // Assume everything is written with TailwindCSS and DaisyUI
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { CategoryType, UserType, VeterinarianType } from "../types";
 import {
     createVeterinarian,
@@ -15,7 +15,7 @@ type VeterinarianInfoProps = {
 };
 
 export default function VeterinarianInfo({ flashMessage, currentUser }: VeterinarianInfoProps) {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
 
   const [veterinarian, setVeterinarian] = useState<Partial<VeterinarianType>>({});

@@ -1,5 +1,5 @@
 import { Cloudinary } from "@cloudinary/url-gen";
-import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
+import { AdvancedImage } from "@cloudinary/react";
 import {fill} from "@cloudinary/url-gen/actions/resize";
 import {focusOn} from "@cloudinary/url-gen/qualifiers/gravity";
 import {FocusOn} from "@cloudinary/url-gen/qualifiers/focusOn";

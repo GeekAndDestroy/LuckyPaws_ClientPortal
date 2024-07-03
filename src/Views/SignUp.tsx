@@ -1,5 +1,5 @@
 // Assume everything is written with TailwindCSS and DaisyUI
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { CategoryType, UserFormDataType, UserType } from "../types";
 import { register } from "../lib/apiWrapper";

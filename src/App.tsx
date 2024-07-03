@@ -22,16 +22,17 @@ function App() {
   const [message, setMessage] = useState<string | undefined>(undefined);
   const [category, setCategory] = useState<CategoryType|undefined>(undefined)
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(localStorage.getItem('token') ? true : false)
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(localStorage.getItem('is_admin') === 'true' ? true : false)
+  // const [isAdmin, setIsAdmin] = useState<boolean | null>(localStorage.getItem('is_admin') === 'true' ? true : false)
   const [loggedInUser, setLoggedInUser] = useState<Partial<UserType>>({
-      email: '',
-      first_name: '',
-      last_name: '',
-      token: '',
-      user_id: NaN,
-      is_admin: null
+    email: '',
+    first_name: '',
+    last_name: '',
+    token: '',
+    user_id: NaN,
+    is_admin: null
   })
-
+  
+  const isAdmin = (localStorage.getItem('is_admin') === 'true' ? true : false)
 
 
 
@@ -117,3 +118,4 @@ const logUserOut = () => {
 }
 
 export default App
+

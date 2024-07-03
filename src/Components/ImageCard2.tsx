@@ -1,6 +1,6 @@
 // Assume everything is written with TailwindCSS and DaisyUI
 
-import { ImageType } from "../types";
+// import { ImageType } from "../types";
 
 
 type ImageCard2Props = {

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 
 type HomeProps = {currentUser: UserType;}
 
-export default function Home({currentUser}: HomeProps) {
+export default function Home({}: HomeProps) {
 
     const [images, setImages] = useState<Partial<ImageType[]>>([]);
 

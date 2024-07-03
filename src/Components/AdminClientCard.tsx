@@ -1,5 +1,5 @@
 // Assume everything is written with TailwindCSS and DaisyUI
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CategoryType, ImageType, UserType } from "../types";
 import { uploadImage, uploadImageToCloudinary } from "../lib/apiWrapper";
 
@@ -21,6 +21,13 @@ export default function AdminClientCard({
     const [image, setImage] = useState<Partial<ImageType>>({});
     const [imageDesc, setImageDesc] = useState<string>("");
 
+    useEffect(() => {
+        console.log("file", file);
+        console.log("image", image);
+        console.log("description", imageDesc);
+        console.log("client", client);
+    }, [file, image, imageDesc]);
+
     const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         // Update the state
         setFile(event.target.files![0]);
@@ -30,53 +37,81 @@ export default function AdminClientCard({
         setImageDesc(event.target.value);
     };
 
-    const handleFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    // const handleFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
+    //     e.preventDefault();
+
+    //     let response = await uploadImageToCloudinary(file!);
         
+    //     if (response.error) {
+    //         console.log(response.error);
+    //         flashMessage(response.error, "danger");
+    //     } else {
+    //         console.log(response.data);
+    //         flashMessage(`Image uploaded successfully!`, "success");
+    //         let imageResponse = await response.data;
+    
+    //         setImage({
+    //             image_url: imageResponse.public_id,
+    //             client_user_id: client!.user_id,
+    //             description: imageDesc,
+    //         });
+    //         console.log("description after setImage", imageDesc);
+    //         console.log("after setImage", image);
+    
+    //         let response2 = await uploadImage(currentUser!.token, image);
+    //         if (response2.error) {
+    //             console.log(response2.error);
+    //             flashMessage(response2.error, "danger");
+    //         } else {
+    //             console.log(response2.data);
+    //             flashMessage(`Image uploaded successfully!`, "success");
+    //         }
+    //     }
+    // };
 
-        let response = await uploadImageToCloudinary(file!);
-        if (response.error) {
-            console.log(response.error);
-            flashMessage(response.error, "danger");
-        } else {
-            console.log(response.data);
-            flashMessage(`Image uploaded successfully!`, "success");
-        }
-        let imageResponse = response.data;
-        console.log("imagetest", imageResponse);
+    const handleFileUpload = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
 
-        setImage({
-            image_url: imageResponse.public_id,
-            client_user_id: client!.user_id,
-            description: imageDesc,
-        });
+        let imageResponse: { public_id: string } = {
+            public_id: ""
+        };
 
-        console.log("description after setImage", imageDesc);
-        console.log("after setImage", image);
-
-        let response2 = await uploadImage(currentUser!.token, image);
-        if (response2.error) {
-            console.log(response2.error);
-            flashMessage(response2.error, "danger");
-        } else {
-            console.log(response2.data);
-            flashMessage(`Image uploaded successfully!`, "success");
-        }
-
-        // console.log(imageURL);
-
-        // let response3 = await editDog(
-        //     imageURL,
-        //     parseInt(dogId ?? ""),
-        //     currentUser!.token
-        // );
-        // if (response.error) {
-        //     console.log(response.error);
-        //     flashMessage(response.error, "danger");
-        // } else {
-        //     let newDog = response.data!;
-        //     flashMessage(`Picture Updated!`, "success");
-        //     console.log(newDog);
+        uploadImageToCloudinary(file!)
+            .then((response) => {
+                if (response.error) {
+                    console.log(response.error);
+                    flashMessage(response.error, "danger");
+                } else {
+                    console.log(response.data);
+                    flashMessage(`Image uploaded successfully!`, "success");
+                    imageResponse = response.data;
+                }
+            })
+            .then(() => {
+                setImage({
+                    image_url: imageResponse.public_id,
+                    client_user_id: client!.user_id,
+                    description: imageDesc,
+                });
+                console.log("description after setImage", imageDesc);
+                console.log("after setImage", image);
+            })
+            .then(() => {
+                uploadImage(currentUser!.token, image)
+            })
+            // .then((response2) => {
+            //     if (response2!.error) {
+            //         console.log(response2!.error);
+            //         flashMessage(response2!.error, "danger");
+            //     } else {
+            //         console.log(response2!.data);
+            //         flashMessage(`Image uploaded successfully!`, "success");
+            //     }
+            // })
+            .catch((error) => {
+                console.log(error);
+                flashMessage("An error occurred during image upload", "danger");
+            });
     };
 
     return (

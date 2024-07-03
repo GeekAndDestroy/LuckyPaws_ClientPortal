@@ -1,6 +1,6 @@
 // Assume everything is written with TailwindCSS and DaisyUI
 import { Cloudinary } from "@cloudinary/url-gen";
-import { AdvancedImage, responsive, placeholder, accessibility } from "@cloudinary/react";
+import { AdvancedImage} from "@cloudinary/react";
 import { fill } from "@cloudinary/url-gen/actions/resize";
 import {autoGravity} from "@cloudinary/url-gen/qualifiers/gravity";
 
@@ -23,9 +23,8 @@ export default function ImageCard({ image }: ImageCardProps) {
     return (
         <>
             <div className="w-max mt-3">
-                <div className="z-0 bg-base-100 shadow-xl mx-1">
+                <div className="z-0 bg-base-100 shadow-xl mx-1 rounded-2xl">
                 <button
-                        
                         onClick={() =>
                             (
                                 document.getElementById(
@@ -34,7 +33,7 @@ export default function ImageCard({ image }: ImageCardProps) {
                             ).showModal()
                         }
                     >
-                    <AdvancedImage
+                    <AdvancedImage className="rounded-2xl"
                         cldImg={myImageThumb
                             .resize(
                                 fill()

@@ -574,27 +574,59 @@ export async function uploadImageToCloudinary(file: File) {
     return { data, error }
 }
 
+export async function uploadUpdateToCloudinary(file: File, token:string, id:number, desc:string) {
+    let data;
+    let error;
 
-// export async function uploadImageToCloudinary(file: string) {
-//     let data;
-//     let error;
+    const url = "https://api.cloudinary.com/v1_1/djchjozvp/image/upload";
 
-//     const url = "https://api.cloudinary.com/v1_1/djchjozvp/upload";
-//     try{
-//         const response = await fetch(url, {
-//             method: "post",
-//             body: JSON.stringify({
-//             file: file,
-//             upload_preset: "np97uesu",
-//             api_key: String(import.meta.env.VITE_API_KEY) 
-//       }),
-//     })
-//     console.log(response)
-//     } catch (err) {
-//             error = "Something went wrong"       
-//     }
-//     return { data, error }
-// }
+    // const username = import.meta.env.VITE_API_KEY
+    // const password = import.meta.env.VITE_API_SECRET
+
+ 
+    try{
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('upload_preset', 'np97uesu')
+        console.log('from wrapper:', formData);
+        console.log('from wrapper:', file);
+        console.log('from wrapper:', id);
+        console.log('from wrapper:', desc);
+
+
+        const response = await fetch(url, {
+            method: "post",
+            body: formData 
+        })
+        // const response = await apiClientBasicAuth(username, password).post(url, file)
+        data = await response.json()
+        console.log(data)
+        console.log(data.public_id)
+
+        let image = {
+            image_url: data.public_id,
+            client_user_id: id,
+            description: desc,
+        }
+
+        console.log('image in wrapper:', image);
+
+        const response2 = await uploadImage(token, image);
+
+        if (response2.error) {
+            console.log(response2.error);
+        } else {
+            console.log('response2', response2.data);
+        }
+
+    } catch (err) {
+            error = "Something went wrong"       
+    } 
+    return { data, error }
+}
+
+
+
     
 
 

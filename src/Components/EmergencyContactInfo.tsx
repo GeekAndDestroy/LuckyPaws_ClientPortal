@@ -1,12 +1,10 @@
 // Assume everything is written with TailwindCSS and DaisyUI
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { CategoryType, EmergencyContactType, UserType } from "../types";
 import {
     createEmergencyContact,
-    getEmergencyContacts,
     editEmergencyContact,
-    deleteEmergencyContact,
     getEmergencyContactByUserID
 } from "../lib/apiWrapper";
 
@@ -16,7 +14,7 @@ type EmergencyContactInfoProps = {
 };
 
 export default function EmergencyContactInfo({ flashMessage, currentUser }: EmergencyContactInfoProps) {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { ecId } = useParams();
 
   const [emergencyContacts, setEmergencyContacts] = useState<Partial<EmergencyContactType>>({});

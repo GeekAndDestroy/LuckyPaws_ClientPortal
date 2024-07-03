@@ -8,7 +8,7 @@ type NavigationProps = {
     isAdmin: boolean | null
 };
 
-export default function Navigation({ isLoggedIn, logUserOut, isAdmin }: NavigationProps) {
+export default function Navigation({ logUserOut, isAdmin }: NavigationProps) {
 
   const [isdark, setIsdark] = useState(
     JSON.parse(localStorage.getItem('isdark') ?? "false")
@@ -55,9 +55,9 @@ export default function Navigation({ isLoggedIn, logUserOut, isAdmin }: Navigati
                         <li>
                             <a href="../profile">Profile</a>
                         </li>
-                        <li>
+                        {/* <li>
                             <a>Book a Visit</a>
-                        </li>
+                        </li> */}
                         {isAdmin && <li>
                             <a href="../admin">Admin Page</a>
                             </li>}
